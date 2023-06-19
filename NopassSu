@@ -1,0 +1,17 @@
+https://www.baeldung.com/linux/run-as-another-user
+
+
+3.2. Disabling the Password Prompt
+
+The password prompt might not always be preferable, especially during scripting. As the su command relies on Linux’s PAM for authentication purposes, we can disable the password prompt for the su command through its PAM configuration file.
+
+Let’s disable the password prompt when user dave is executing scripts as user annie.
+
+Firstly, we open up the file /etc/pam.d/su with any text editor. Then, we’ll add the following lines into the file right after the line auth sufficient pam_rootok.so:
+
+auth  [success=ignore default=1] pam_succeed_if.so user = annie
+auth  sufficient                 pam_succeed_if.so use_uid user = dave
+
+
+
+

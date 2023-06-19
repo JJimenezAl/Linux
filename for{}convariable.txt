@@ -1,0 +1,25 @@
+#!/bin/bash
+START=1
+END=5
+echo "Countdown"
+ 
+for (( c=$START; c<=$END; c++ ))
+do
+	echo -n "$c "
+	sleep 1
+done
+ 
+echo
+echo "Boom!"
+
+# No funciona for i in {0..$a}
+
+#Otra solucion
+
+#!/bin/bash
+START=1
+END=5
+for i in $(eval echo "{$START..$END}")
+do
+	echo "$i"
+done

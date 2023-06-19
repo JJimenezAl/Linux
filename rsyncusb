@@ -1,0 +1,3 @@
+#!/bin/bash
+rsync -ar --delete --exclude Librosx/ /run/media/python/sandisc/ /run/media/python/DATOS/Trabajo/USB  --log-file=mylog.log
+

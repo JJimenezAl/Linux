@@ -1,0 +1,15 @@
+#filtro fasta añado s=" inicio final variable
+#!/bin/bash
+rm upstream.txt
+cat upstream250.txt | grep -v Rv >>upstream.txt
+#Añado " al final
+sed -i 's/$/"/' upstream.txt
+
+START=1
+END=$(cat upstream.txt | wc -l)
+for (( c=$START; c<=$END; c++ ))
+do
+sed -i "$c s/^/s$c=\"/g" "upstream.txt";
+
+done
+
