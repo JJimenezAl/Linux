@@ -1,0 +1,20 @@
+
+
+/usr/bin/autossh -M 0 -o 'StrictHostKeyChecking=no' -o 'ExitOnForwardFailure=yes' -o 'ServerAliveInterval=30' -o 'ServerAliveCountMax=3' -NR 16789:localhost:22 root@176.12.87.151
+
+
+Servicio
+
+
+[Unit]
+Description=AutoSSH tunnel service with proxy
+After=network.target
+
+[Service]
+Environment='AUTOSSH_GATETIME=0'
+ExecStart=/usr/bin/autossh -M 0 -o 'StrictHostKeyChecking=no' -o 'ExitOnForwardFailure=yes' -o 'ServerAliveInterval=30' -o 'ServerAliveCountMax=3' -NR 16789:localhost:22 root@176.12.87.151
+#ExecStop=/bin/kill \$MAINPID
+
+[Install]
+WantedBy=multi-user.target
+
