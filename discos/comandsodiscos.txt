@@ -1,0 +1,552 @@
+/dev - directory contains the special device files for all the devices.
+/dev/shm – contains shared memory allocation
+/run - used for system logs
+/sys/fs/cgroup - used for cgroups, a kernel feature to limit, police and account the resource usage of certain processes
+
+
+type the command to unmount /mnt forcefully:
+# fuser -km /mnt
+
+umount -l manera suave 
+ you would like to unmount a NFS mount point then try following command:
+# umount -f /mnt
+
+umount -l /PATH/OF/BUSY-DEVICE
+umount -f /PATH/OF/BUSY-NFS(NETWORK-FILE-SYSTEM)
+
+Where,
+
+    -f: Force unmount in case of an unreachable NFS system
+
+---------- TRABAJAR CON DISCOS ----------
+
+# fdisk -l --> Ver particiones físicas.
+# pvdisplay --> volúmenes físicos.
+# pvscan --> Muestra los discos por los que esta formado un vg.
+
+# vgs y lvs --> Ver los lv y los vg.               
+# df -i --> Mirar inodos libres en disco.
+# df -h --> Mirar espacio libre disco.
+# df / | grep / | awk '{ print $5}' | sed 's/%//g'
+#du -sh /home/python/* | sort -h
+
+# 10 ficheros mas grandes
+du -ak SOURCE_DIR | sort -nrk 1 | head
+iostat – Despliega estadísticas de I/O.
+
+##fsck
+
+Sintaxis: fsck [-opciones] /dev/hdX (o sdX)
+
+Opciones:
+-a confirmar automáticamente. No recomendado.
+-c comprobar bloques en el disco.
+-f forzar el chequeo aunque todo parezca ok.
+-v (verbose) despliega más información.
+-r Modo interactivo. Espera nuestra respuesta.
+-y asume yes de respuesta.
+
+ Para forzar el chequeo del disco cada vez que se pone en marcha el ordenador, crear un archivo vacio en la raiz del sistema:
+
+# touch /forcefsck
+
+#Montar ISO
+
+mkdir /mnt/iso
+mount -o loop linux.iso /mnt/iso
+##CRear ISO
+dd if=/dev/cdrom of=image.iso
+
+mkisofs -V "Label" -o image.iso source_dir/
+cdrecord -v dev=/dev/cdrom image.iso
+
+
+
+##tune2fs
+
+El comando tune2fs nos pemite especificar cada cuantos reinicios o cada cuanto tiempo queremos que nos haga un chequeo del sistema de archivos. Este comando está pensado para los sistemas de archivo ext2 y ext3.
+
+tune2fs -c 80 /dev/sda1 (cada 80 reinicios)
+# tune2fs -i 2m /dev/sda1 (cada 2 meses)
+# tune2fs -i 2w /dev/hda3 (cada 2 semanas)
+# tune2fs -i 2d /dev/sda1 (cada 2 dias)
+# tune2fs -l /dev/sdb1 (ver registro completo de la partición)
+# tune2fs -l /dev/hda3 | grep ‘Last checked’ (ver fecha del último escaneo)
+# tune2fs -l /dev/hda3 | grep -i check (veces que se fuerza el chequeo)
+# tune2fs -i 0 /dev/hda3 (desactivar chequeo)
+# showfsck (saber cuantas reiniciadas faltan hasta el proximo chequeo)
+# tune2fs -l /dev/hda3 | grep -i ‘mount count’ (lo mismo que el anterior)
+# e2fsck -fpD /dev/sda1 (para optimizar la partición)
+# tune2fs -m 0 /dev/sdc1 , recuperaremos ese 5% de espacio de reserva
+#por defecto a 5%
+-c : Se buscaran y marcaran los bloques dañados.
+-D : Optimiza los directorios.
+-f : Fuerza el análisis aunque el sistema parezca limpio.
+-p : Repara automáticamente todos los errores.
+-v : Se muestra toda la información.
+
+
+
+#marcar disco fallido y removerlo del array
+
+mdadm /Dev/md0 --fail /dev/sdb
+dmadm /Sev/md0 --remove /dev/sdb
+
+#Purga (fuerza sobreescritura)
+mdadm --zerp-superblock /dev/sdb --force
+#re-añadir al array
+mdadm /dev/md0 --add /dev/sdb
+#rebuild
+watch cat/proc/mdstat
+
+hdparm /dev/hda ———————- Verificar DMA
+hdparm -I /dev/hdx ——————- Información sobre hdx
+hdparm -d1 /dev/hdx —————— Activar DMA en el cd - duro o periférico.
+hdparm -Tt /dev/hdx  ------------Velocidad  
+fsck -fyC /dev/sda1
+lsscsi
+
+
+#nfs
+
+Comprobar version
+
+nfsstat –c
+mount -v
+
+
+lsblk -fm
+
+fdisk -l
+sfdisk con tamaños en Mb 
+
+df -h ver gb disponibles
+
+du -sh * ver tamaños
+
+du --exclude "WILDCARD" DIRECTORY
+du --max-depth 2 DIRECTORY
+find . -iname '*.psd' -print0 | du -ch --files0-from=-
+find /ruta1/ruta2 -name "*.ext.ext2" | xargs du -ch 
+
+pvs ver discos fisicos
+pvdisplay MAs datos
+
+vgdisplay Info VG
+
+fdisk -l ver particiones 
+
+cfdisk editor de particiones
+
+blkid atributos como uid
+
+e2fsck -c /dev/sda5 #repara 
+
+ntfsfix [options] device
+
+
+#carga nuevas entradas con verbose
+mount -av 
+para accesos
+umount -f /patch
+
+lsscsi
+
+#Ver puntons de montaje con formatos
+lsblk -fm
+
+fdisk -l
+fdisk con tamaños en Mb 
+
+
+-- AMPLIAR SWAP --
+
+# swapoff /dev/....
+# lvremove /dev/...
+# lvcreate -L.. -n... rootvg
+# swapon /dev/....
+
+# lvcreate -L 64.0G -n swap rootvg
+# mkswap /dev/rootvg/swap
+# swapon /dev/rootvg/swap
+
+ejemplo
+
+vgextend cl /dev/sdb
+
+lvcreate -L +3G -n /dev/mapper/cl-swap cl
+
+
+-------------------------
+
+
+Otra opcion en fichero
+
+swapon -s # ver swap
+
+fallocate -l 1G /swapfile # Lo crea en /
+ls -lh /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+añadirlo a /etc/fstab
+
+/swapfile   swap	   sw  0   0
+
+#Swappinees
+
+cat /proc/sys/vm/swappiness  #Frecuencia de intercambio.Valor de [0-30]. En 0 solo intercambia en caso extremo
+sysctl vm.swappiness=5
+#Para que este cambio sea permanente 
+nano /etc/sysctl.conf
+vm.swappiness = 5
+
+#Cache Pressure. Entradas especiales del sistema de metadatos.Por defecto a 100.Eliminara info demasiado rápido
+
+cat /proc/sys/vm/vfs_cache_pressure
+
+sysctl vm.vfs_cache_pressure=35
+Para dejarlo fijo editar sysctl
+
+
+si no se añade disco y hay espacio sin particionar 
+#fdisk -cu /dev/sda
+
+
+-- CREACION LV -- 
+
+# /dev/sapvg/lvsap        /usr/sap/TRP            ext3    defaults        1 2
+
+# lvcreate -L 1.0G -n lvsap sapvg
+Otro ejemplo con un vg creado aux
+
+lvcreate -L 1.0G -n swap2 aux
+
+# mkfs.ext3 /dev/sapvg/lvsap
+# lvdisplay /dev/sapvg/lvsap
+# mkdir -p /usr/sap/TRP
+# mount /usr/sap/TRP
+
+lvcreate -n backup -L 1.5G backup
+
+-- AMPLIAR LV --             
+
+#Primero crear VG si no existe y añadirle disco (un poco mas abajo)
+# lvextend -L+10G /dev/mapper/oraclevg-lvodata --> Suma 10 Gb a al tamaño que ya tenemos.
+lvextend -l +100%FREE /dev/mapper/centos-XX
+# resize2fs /dev/mapper/oraclevg-lvodata --> Redimensiona el fichero.
+# ext2online --> Redimensiona el fichero.
+
+
+
+# lvextend -l 100%FREE /dev/mapper/cl-swap
+
+Use this for ext3/4 based file systems
+
+resize2fs /dev/centos/var
+
+
+Alternatively, use this for xfs based file systems
+
+xfs_growfs /dev/centos/var
+
+
+#Versiones nuevas de RH en un paso
+
+lvresize -r -L +50G /dev/mapper/vgsys-root
+
+
+
+
+--CREAR VG--
+PVSCAN
+vgcreate VolumGroup2 /dev/sdxxb
+
+-- REDUCIR LV --
+
+# umount /software/soft
+# e2fsck -f  /dev/mapper/rootvg-lvsoft
+# resize2fs /dev/mapper/rootvg-lvsoft 5G
+# lvreduce -L 5GB /dev/rootvg/lvsoft
+
+-- AÑADIR DISCO A VG -- 
+
+# fdisk -l /dev/sdb
+# fdisk /dev/sdb
+# pvcreate /dev/sdblvexten
+# vgextend oraclevg /dev/sdb
+# vgdisplay
+# df -h
+
+
+--ELIMINAR VG ----
+
+umpunt /punto
+
+lvchange -an /dev/mapper/backup-backup
+lvremove /dev/mapper/backup-backup
+vgchange -an backup
+vgremove datavg
+pvremove /dev/sdb
+
+
+#ELIMINAR DISCOS
+
+vgreduce --removemissing --force vg_srvlinux
+
+#Eliminar volume group
+
+lvremove -f [vg_name]/[lv_name] #d
+vgremove [vg_name]esmontamos primero
+vgchange -an [vg_name]
+pvremove [pv_name]
+
+#ELIMINAR Logical y asignar espacio libre
+#disable
+umount /home
+lvchange -an /dev/mapper/cl-home
+lvchange -an  /dev/centos/home
+
+
+lvremove /dev/mapper/cl-home
+lvremove /dev/centos/home
+
+lvextend -L +150G /dev/mapper/cl-root
+lvextend -L +300G /dev/centos/root
+
+e2fsck -f /dev/mapper/cl-root
+xfs_growfs  /dev/mapper/cl-root
+
+
+xfs_growfs  /dev/centos/root
+
+
+#Instslacion System Storage Manager
+yum install system-storage-manager
+
+#listado 
+ssm list
+
+
+http://xmodulo.com/manage-lvm-volumes-centos-rhel-7-system-storage-manager.html
+
+#Snapshot
+
+ssm snapshot -s 1G -n crash_snap lvm_pool/crash_vol
+ssm list snap
+
+
+#Snapshots are deleted like volumes:
+
+umount /crash
+ssm remove lvm_pool/crash_snap
+mount /dev/lvm_pool/crash_vol /crash
+
+
+Currently there is no possibility to recover LVM snapshots – for this you’ll have to use lvconvert instead (like before):
+
+
+lvconvert --merge lvm_pool/crash_snap
+
+
+
+#rescanear scsi
+
+
+ls /sys/class/scsi_host/
+echo "- - -" > /sys/class/scsi_host/host0/scan
+echo "- - -" > /sys/class/scsi_host/host1/scan
+echo "- - -" > /sys/class/scsi_host/host2/scan
+
+#automatizado
+for a in $(ls) ;do  echo "- - -" > /sys/class/scsi_host/$a/scan ;done
+
+
+ls /sys/class/scsi_device/
+
+echo 1 > /sys/class/scsi_device/0\:0\:0\:0/device/rescan
+echo 1 > /sys/class/scsi_device/2\:0\:0\:0/device/rescan
+#automatizado
+
+for a in $(ls /sys/class/scsi_device/) ; do echo 1 > $a/device/rescan ;done
+
+#Check partitions boot
+sudo touch forcefsck
+
+
+##UID de disco
+blkid
+o
+lsblk -fm (ademas por punto de montaje)
+
+
+
+###USB
+
+
+ls -liar /sys/bus/usb/devices/*
+
+lsusb -vvv
+
+
+
+
+hdparm /dev/hda ———————- Verificar DMA
+hdparm -I /dev/hdx ——————- Información sobre hdx
+hdparm -d1 /dev/hdx —————— Activar DMA en el cd - duro o periférico.
+hdparm -Tt /dev/hdx  ------------test Velocidad  
+
+
+
+#Espacio
+
+#Ordena por tamaños (campo 4)
+
+df --local > tmp sort -k4nr tmp
+#Eliminamos la primer a linea
+$ df --local > tmp
+$ sed --in-place '1d' tmp
+$ sort -k4nr tmp
+
+
+
+
+Vdr tipo particion ext,xfs
+
+df -Th
+lsblk -f Ademas ver  disco como carpetas
+
+ver ID disco
+blkid /dev/sdb1
+
+findmt # ver dispositivos montados
+
+
+cat /sys/class/fc_remote_ports/rport-4\:0-1/dev_loss_tmo
+rescanscasi
+######## ######## ######## ######## ######## ######## ######## ######## 
+Repair filesystem # mount -w -o remount /
+######## ######## ######## ######## ######## ######## ######## ######## 
+
+
+#Crear fichero 1 gb
+
+dd if=/dev/urandom of=tst count=1024 bs=1M
+
+dd if=/dev/urandom of=tst count=1024 bs=1G # seria 1 Tb
+
+dd if=/dev/zero of=junk.data bs=1M count=1
+
+dd if=/dev/zero of=loopbackfile.img bs=1G count=1
+
+Unit size Code
+Byte (1B) c
+Word (2B) w
+Block (512B) b
+Kilo Byte (1024B) k
+Mega Byte (1024 KB) M
+Giga Byte (1024 MB) G
+
+
+##Using systemctl to enable tmpfs in /tmp
+
+You can use the systemctl command to enable tmpfs in the /tmp folder, first use the following command to check if this feature is not already enabled:
+systemctl is-enabled tmp.mount
+Will show the current status of settings you can use the following command to enable it:
+systemctl enable tmp.mount
+
+
+##Manually mounting a /tmp/fs
+
+tmpfs /tmp tmpfs size=512m 0 0
+
+And then running the mount command like this:
+mount –a
+
+##Creating a tmpfs on the fly
+mount -t tmpfs -o size=1G tmpfs /mnt/mytmpfs
+
+
+notas
+
+#Defrag
+
+$ sudo e4defrag -c /dev/sda3
+Look at the 'Fragmentation score' and see if it is not too high (e.g., below 30). Even if the partition is healthy, the above command will list the files that have been fragmented and may suffer from longer access times. It is easy to defragment them with this command:
+$ sudo e4defrag /dev/sda3
+The e4defrag command also accepts directories, so that you don't have to process the whole partition if you only work with a given directory. More than that, defragmenting adjusts free extents to the size of the files that you store. So, if you run the e2freefrag tool afterwards, you'll see the table of extents of different sizes, adapted to the kind of information that already exists on the disk (Figure 3):
+
+In addition to traditional defragmentation, you can also improve ext4 filesystem performance by reallocating frequently used files using e4rat. This tool reduces disk access time utilizing the EXT4_IOC_MOVE_EXT ioctl feature of ext4 and doing so-called online defragmentation. Modern e4rat code [3] takes few minutes to build from source (see the project page for guidance). Normally, e4rat requires three phases: first for learning (collecting files), second for reallocating what has been collected, and third for preloading reallocated data to page cache (Figure 4). To get started with e4rat, enter:
+$ sudo systemctl stop auditd // (auditd conflicts with E4rat)
+$ sudo e4rat-collect // (start opening apps you want to optimize, hit Ctrl+C when done)
+$ sudo e4rat-realloc e4rat-collect.log
+
+
+    1. Eliminate excessive cryptographic routines that involve hard drives. To prevent the I/O on your SSD or HDD from contributing to the entropy pool, you can disable the add_random setting for your block devices:
+# echo 0 > /sys/block/sda/queue/add_random
+
+
+
+
+
+------------------
+------------------
+------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
