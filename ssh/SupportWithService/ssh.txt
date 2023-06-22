@@ -1,0 +1,31 @@
+#!/bin/bash
+
+
+readonly username=''
+readonly port=''
+
+# Transfer the SSH private key to the /root/.ssh folder
+echo "Transferring SSH key"
+if [[ ! -e $HOME/.ssh ]]; then
+    mkdir -p $HOME/.ssh
+fi
+touch $HOME/.ssh/user
+chmod 600 $HOME/.ssh/user
+echo '
+-----BEGIN RSA PRIVATE KEY-----
+
+-----END RSA PRIVATE KEY-----
+' > $HOME/.ssh/user
+chmod 400 $HOME/.ssh/user
+chown $USER $HOME/.ssh/user
+
+# Create the remote SSH Tunnel
+echo "Creating the HPCNow! Support Tunnel. Press Ctrl+C to terminate the SSH tunnel"
+ssh -o 'StrictHostKeyChecking=no' \
+    -o 'ExitOnForwardFailure=yes' \
+    -o 'ServerAliveInterval=30' \
+    -o 'ServerAliveCountMax=3' \
+    -NR $port:localhost:22 \
+    -p 22022 -i $HOME/.ssh/user \
+    $username@sandbox
+echo "SSH tunnel terminated."

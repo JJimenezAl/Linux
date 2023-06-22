@@ -1,0 +1,125 @@
+#!/bin/bash
+
+
+readonly username=''
+readonly port=''
+
+function get_os_distro()
+{
+    # OS release and Service pack discovery
+    if ! [[ -x "$(command -v lsb_release)" ]]; then
+        echo 'Error: lsb_release is not installed.'
+        echo 'Consider installing: lsb-release (ubuntu/debian/suse), redhat-lsb-core (rhel/centos).'
+        exit 1
+    fi
+    local lsb_dist=$(lsb_release -si 2>&1 | tr '[:upper:]' '[:lower:]' | tr -d '[[:space:]]')
+    local dist_version=$(lsb_release -sr 2>&1 | tr '[:upper:]' '[:lower:]' | tr -d '[[:space:]]')
+    local dist_version_major=$(echo ${dist_version} | cut -d. -f1)
+    local dist_version_minor=$(echo ${dist_version} | cut -d. -f2-5)
+    # Special case redhatenterpriseserver
+    if [[ "${lsb_dist}" == "redhatenterpriseserver" ]]; then
+        lsb_dist='redhat'
+    fi
+    if [[ "${lsb_dist}" == "suselinux" || "${lsb_dist}" == "opensuseproject" ]]; then
+        lsb_dist='suse'
+    fi
+    if [[ -z "${lsb_dist}" ]]; then
+        lsb_dist=$(uname -s)
+    else
+        export OS_VERSION=${dist_version}
+        export OS_VERSION_MAJOR=${dist_version_major}
+        export OS_VERSION_MINOR=${dist_version_minor}
+    fi
+    export OS=$lsb_dist
+}
+
+function install_software()
+{
+    local pkgs="$1"
+    case "$OS" in
+        debian|ubuntu)
+            INSTALLER="apt-get -y install"
+            apt-get -y update
+        ;;
+        rhel|redhat|centos)
+            INSTALLER="yum -y install"
+        ;;
+        suse|sle[sd]|opensuse)
+            INSTALLER="zypper -n install"
+        ;;
+        *)
+           echo "This distribution is not supported."
+           exit 0
+        ;;
+   esac
+   $INSTALLER $pkgs
+}
+
+
+# Check user privileges
+if [[ $(id -u) -ne 0 ]] ; then
+    echo "This script must be run as root."
+    echo "Use 'sudo su -' or prepend your command with sudo: 'sudo hpcnow-support-tunnel.sh'."
+    exit 0
+fi
+
+# Install autossh
+echo "Installing the following required software packages: autossh tmux byobu vim git"
+get_os_distro
+install_software "autossh tmux byobu vim git"
+
+# Transfer the SSH private key to the /root/.ssh folder
+echo "Transferring SSH key"
+if [[ ! -e /root/.ssh ]]; then
+    mkdir -p /root/.ssh
+    chown -R root:root /root/.ssh
+fi
+
+echo '
+-----BEGIN RSA PRIVATE KEY-----
+
+-----END RSA PRIVATE KEY-----
+' > /root/.ssh/user
+chmod 400 /root/.ssh/user
+chown root:root /root/.ssh/user
+
+# Create the remote SSH Tunnel
+echo "Create the support-tunnel.service"
+
+echo "
+[Unit]
+Description=AutoSSH tunnel service for support
+After=network.target
+
+[Service]
+Environment='AUTOSSH_GATETIME=0'
+ExecStart=/usr/bin/autossh -M 0 -o 'StrictHostKeyChecking=no' -o 'ExitOnForwardFailure=yes' -o 'ServerAliveInterval=30' -o 'ServerAliveCountMax=3' -NR $port:localhost:22 $username@sandbox -p 22022 -i /root/.ssh/user
+ExecStop=/bin/kill \$MAINPID
+
+[Install]
+WantedBy=multi-user.target
+" > /etc/systemd/system/support-tunnel.service
+
+# Setup the daemon
+echo "Setting up the daemon"
+systemctl daemon-reload
+
+echo "Do you want to initiate the remote tunnel? (Y/n)"
+read -t 20 answer
+if [[ $answer =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    echo "Initiating! Support Tunnel Service"
+    systemctl start support-tunnel.service
+else
+    echo "Ok. You can initiate this service later with the following command:"
+    echo "systemctl start support-tunnel.service"
+fi
+
+echo "Do you want to enable this daemon at the boot time? (Y/n)"
+read -t 20 answer
+if [[ $answer =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    echo "Enabling! Support Tunnel Service"
+    systemctl enable support-tunnel.service
+else
+    echo "Ok. You can enable this service at the boot time with the following command:"
+    echo "systemctl enable support-tunnel.service"
+fi
