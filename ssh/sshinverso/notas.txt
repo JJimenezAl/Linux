@@ -1,0 +1,56 @@
+ssh  -R 16789:localhost:22 root@192.168.74.128
+
+#Mejor con autossh
+
+Ej: ssh -N -f -R 22022:localhost:22 200.142.168.151
+ssh -p 22022 root@localhost
+
+
+hacerlo con screen y salir o background
+
+ssh -N -f -R 16789:localhost:22 192.168.74.131
+
+-f      Requests ssh to go to background just before command execution.  This is useful if ssh is going to ask for passwords or passphrases, but the user wants it in the background.  This implies -n.  The recommended way to
+             start X11 programs at a remote site is with something like ssh -f host xterm.
+
+
+-N      Do not execute a remote command.  This is useful for just forwarding ports.
+
+#en vez de con screen mejor hacer acon auttossh que reconecta en caso de fallo y dejar como servicio
+#Cogigo en  tunnelInversoAutossh.txt
+
+NOTAS
+
+
+
+C1----Apache-------C3
+
+
+
+En c3
+ssh -R 16789:localhost:22 ipApache
+
+sshd
+Gatewayports a yes
+No cambio TCP forwarding yes
+
+
+
+
+En apache si quiero conectar a C3
+sshd
+no cambio TCP forwarding a yes
+
+ssh -p 16789 localhost
+
+
+
+
+en C1 si quiero lanzar conexion a c3
+
+ssh Apache -p 16789
+
+sshd
+no cambio TCP forwarding a yes
+
+
