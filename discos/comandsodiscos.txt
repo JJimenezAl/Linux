@@ -1,5 +1,5 @@
 /dev - directory contains the special device files for all the devices.
-/dev/shm – contains shared memory allocation
+/dev/shm â€“ contains shared memory allocation
 /run - used for system logs
 /sys/fs/cgroup - used for cgroups, a kernel feature to limit, police and account the resource usage of certain processes
 
@@ -20,8 +20,8 @@ Where,
 
 ---------- TRABAJAR CON DISCOS ----------
 
-# fdisk -l --> Ver particiones físicas.
-# pvdisplay --> volúmenes físicos.
+# fdisk -l --> Ver particiones fÃ­sicas.
+# pvdisplay --> volÃºmenes fÃ­sicos.
 # pvscan --> Muestra los discos por los que esta formado un vg.
 
 # vgs y lvs --> Ver los lv y los vg.               
@@ -32,17 +32,17 @@ Where,
 
 # 10 ficheros mas grandes
 du -ak SOURCE_DIR | sort -nrk 1 | head
-iostat – Despliega estadísticas de I/O.
+iostat â€“ Despliega estadÃ­sticas de I/O.
 
 ##fsck
 
 Sintaxis: fsck [-opciones] /dev/hdX (o sdX)
 
 Opciones:
--a confirmar automáticamente. No recomendado.
+-a confirmar automÃ¡ticamente. No recomendado.
 -c comprobar bloques en el disco.
 -f forzar el chequeo aunque todo parezca ok.
--v (verbose) despliega más información.
+-v (verbose) despliega mÃ¡s informaciÃ³n.
 -r Modo interactivo. Espera nuestra respuesta.
 -y asume yes de respuesta.
 
@@ -64,26 +64,26 @@ cdrecord -v dev=/dev/cdrom image.iso
 
 ##tune2fs
 
-El comando tune2fs nos pemite especificar cada cuantos reinicios o cada cuanto tiempo queremos que nos haga un chequeo del sistema de archivos. Este comando está pensado para los sistemas de archivo ext2 y ext3.
+El comando tune2fs nos pemite especificar cada cuantos reinicios o cada cuanto tiempo queremos que nos haga un chequeo del sistema de archivos. Este comando estÃ¡ pensado para los sistemas de archivo ext2 y ext3.
 
 tune2fs -c 80 /dev/sda1 (cada 80 reinicios)
 # tune2fs -i 2m /dev/sda1 (cada 2 meses)
 # tune2fs -i 2w /dev/hda3 (cada 2 semanas)
 # tune2fs -i 2d /dev/sda1 (cada 2 dias)
-# tune2fs -l /dev/sdb1 (ver registro completo de la partición)
-# tune2fs -l /dev/hda3 | grep ‘Last checked’ (ver fecha del último escaneo)
+# tune2fs -l /dev/sdb1 (ver registro completo de la particiÃ³n)
+# tune2fs -l /dev/hda3 | grep â€˜Last checkedâ€™ (ver fecha del Ãºltimo escaneo)
 # tune2fs -l /dev/hda3 | grep -i check (veces que se fuerza el chequeo)
 # tune2fs -i 0 /dev/hda3 (desactivar chequeo)
 # showfsck (saber cuantas reiniciadas faltan hasta el proximo chequeo)
-# tune2fs -l /dev/hda3 | grep -i ‘mount count’ (lo mismo que el anterior)
-# e2fsck -fpD /dev/sda1 (para optimizar la partición)
+# tune2fs -l /dev/hda3 | grep -i â€˜mount countâ€™ (lo mismo que el anterior)
+# e2fsck -fpD /dev/sda1 (para optimizar la particiÃ³n)
 # tune2fs -m 0 /dev/sdc1 , recuperaremos ese 5% de espacio de reserva
 #por defecto a 5%
--c : Se buscaran y marcaran los bloques dañados.
+-c : Se buscaran y marcaran los bloques daÃ±ados.
 -D : Optimiza los directorios.
--f : Fuerza el análisis aunque el sistema parezca limpio.
--p : Repara automáticamente todos los errores.
--v : Se muestra toda la información.
+-f : Fuerza el anÃ¡lisis aunque el sistema parezca limpio.
+-p : Repara automÃ¡ticamente todos los errores.
+-v : Se muestra toda la informaciÃ³n.
 
 
 
@@ -94,14 +94,14 @@ dmadm /Sev/md0 --remove /dev/sdb
 
 #Purga (fuerza sobreescritura)
 mdadm --zerp-superblock /dev/sdb --force
-#re-añadir al array
+#re-aÃ±adir al array
 mdadm /dev/md0 --add /dev/sdb
 #rebuild
 watch cat/proc/mdstat
 
-hdparm /dev/hda ———————- Verificar DMA
-hdparm -I /dev/hdx ——————- Información sobre hdx
-hdparm -d1 /dev/hdx —————— Activar DMA en el cd - duro o periférico.
+hdparm /dev/hda â€”â€”â€”â€”â€”â€”â€”- Verificar DMA
+hdparm -I /dev/hdx â€”â€”â€”â€”â€”â€”- InformaciÃ³n sobre hdx
+hdparm -d1 /dev/hdx â€”â€”â€”â€”â€”â€” Activar DMA en el cd - duro o perifÃ©rico.
 hdparm -Tt /dev/hdx  ------------Velocidad  
 fsck -fyC /dev/sda1
 lsscsi
@@ -111,18 +111,18 @@ lsscsi
 
 Comprobar version
 
-nfsstat –c
+nfsstat â€“c
 mount -v
 
 
 lsblk -fm
 
 fdisk -l
-sfdisk con tamaños en Mb 
+sfdisk con tamaÃ±os en Mb 
 
 df -h ver gb disponibles
 
-du -sh * ver tamaños
+du -sh * ver tamaÃ±os
 
 du --exclude "WILDCARD" DIRECTORY
 du --max-depth 2 DIRECTORY
@@ -156,7 +156,7 @@ lsscsi
 lsblk -fm
 
 fdisk -l
-fdisk con tamaños en Mb 
+fdisk con tamaÃ±os en Mb 
 
 
 -- AMPLIAR SWAP --
@@ -188,7 +188,7 @@ fallocate -l 1G /swapfile # Lo crea en /
 ls -lh /swapfile
 chmod 600 /swapfile
 mkswap /swapfile
-añadirlo a /etc/fstab
+aÃ±adirlo a /etc/fstab
 
 /swapfile   swap	   sw  0   0
 
@@ -200,7 +200,7 @@ sysctl vm.swappiness=5
 nano /etc/sysctl.conf
 vm.swappiness = 5
 
-#Cache Pressure. Entradas especiales del sistema de metadatos.Por defecto a 100.Eliminara info demasiado rápido
+#Cache Pressure. Entradas especiales del sistema de metadatos.Por defecto a 100.Eliminara info demasiado rÃ¡pido
 
 cat /proc/sys/vm/vfs_cache_pressure
 
@@ -208,9 +208,28 @@ sysctl vm.vfs_cache_pressure=35
 Para dejarlo fijo editar sysctl
 
 
-si no se añade disco y hay espacio sin particionar 
+si no se aÃ±ade disco y hay espacio sin particionar 
 #fdisk -cu /dev/sda
 
+--AÃ±adir particion sin aliminar datos--
+
+add non destructively (remain data)
+
+umount /mnt
+e2fsck -g /dev/sdb1
+resize2fs /dev/sdb1 5G
+
+fdisk /dev/sdb
+delete
+
+create
+n
+primary
++5G (tamaÃ±o)
+
+mount /dev/sdb1 /mny
+ls /mnt
+#there are files
 
 -- CREACION LV -- 
 
@@ -230,8 +249,8 @@ lvcreate -n backup -L 1.5G backup
 
 -- AMPLIAR LV --             
 
-#Primero crear VG si no existe y añadirle disco (un poco mas abajo)
-# lvextend -L+10G /dev/mapper/oraclevg-lvodata --> Suma 10 Gb a al tamaño que ya tenemos.
+#Primero crear VG si no existe y aÃ±adirle disco (un poco mas abajo)
+# lvextend -L+10G /dev/mapper/oraclevg-lvodata --> Suma 10 Gb a al tamaÃ±o que ya tenemos.
 lvextend -l +100%FREE /dev/mapper/centos-XX
 # resize2fs /dev/mapper/oraclevg-lvodata --> Redimensiona el fichero.
 # ext2online --> Redimensiona el fichero.
@@ -268,7 +287,7 @@ vgcreate VolumGroup2 /dev/sdxxb
 # resize2fs /dev/mapper/rootvg-lvsoft 5G
 # lvreduce -L 5GB /dev/rootvg/lvsoft
 
--- AÑADIR DISCO A VG -- 
+-- AÃ‘ADIR DISCO A VG -- 
 
 # fdisk -l /dev/sdb
 # fdisk /dev/sdb
@@ -342,7 +361,7 @@ ssm remove lvm_pool/crash_snap
 mount /dev/lvm_pool/crash_vol /crash
 
 
-Currently there is no possibility to recover LVM snapshots – for this you’ll have to use lvconvert instead (like before):
+Currently there is no possibility to recover LVM snapshots â€“ for this youâ€™ll have to use lvconvert instead (like before):
 
 
 lvconvert --merge lvm_pool/crash_snap
@@ -390,16 +409,16 @@ lsusb -vvv
 
 
 
-hdparm /dev/hda ———————- Verificar DMA
-hdparm -I /dev/hdx ——————- Información sobre hdx
-hdparm -d1 /dev/hdx —————— Activar DMA en el cd - duro o periférico.
+hdparm /dev/hda â€”â€”â€”â€”â€”â€”â€”- Verificar DMA
+hdparm -I /dev/hdx â€”â€”â€”â€”â€”â€”- InformaciÃ³n sobre hdx
+hdparm -d1 /dev/hdx â€”â€”â€”â€”â€”â€” Activar DMA en el cd - duro o perifÃ©rico.
 hdparm -Tt /dev/hdx  ------------test Velocidad  
 
 
 
 #Espacio
 
-#Ordena por tamaños (campo 4)
+#Ordena por tamaÃ±os (campo 4)
 
 df --local > tmp sort -k4nr tmp
 #Eliminamos la primer a linea
@@ -460,7 +479,7 @@ systemctl enable tmp.mount
 tmpfs /tmp tmpfs size=512m 0 0
 
 And then running the mount command like this:
-mount –a
+mount â€“a
 
 ##Creating a tmpfs on the fly
 mount -t tmpfs -o size=1G tmpfs /mnt/mytmpfs
