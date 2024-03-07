@@ -211,7 +211,7 @@ Para dejarlo fijo editar sysctl
 si no se añade disco y hay espacio sin particionar 
 #fdisk -cu /dev/sda
 
---Añadir particion sin aliminar datos--
+--Añadir particion sin eliminar datos--
 
 add non destructively (remain data)
 
@@ -230,6 +230,28 @@ primary
 mount /dev/sdb1 /mny
 ls /mnt
 #there are files
+
+--Redimensionar sin borra datos
+
+Resize
+
+umount /mnt
+e2fsck -f /dev/sdb1
+resize2fs /dev/sdb1 10G 
+
+si no la vuelvo a crear puedo ver los nuevos tamaños pero en fdisk pme diria q no hay sectores disponibles
+
+umount /mnt
+
+fsidk /dev/sdb
+delete (d)
+w
+
+fdisk /dev/sdb
+crear
+
+#mantiene datos
+
 
 -- CREACION LV -- 
 
