@@ -1,0 +1,28 @@
+
+
+grubby --info=ALL | grep '^title=' | sed 's/title=//'
+
+grubby --set-default //boot/vmlinuz-5.6.19-300.fc32.x86_64
+
+
+
+grubby --default-kernel
+
+
+Aplicar cambios
+
+
+
+Changes to /etc/default/grub require rebuilding the grub.cfg file as follows:
+
+    On BIOS-based machines, issue the following command as root:
+
+~]# grub2-mkconfig -o /boot/grub2/grub.cfg
+
+    On UEFI-based machines, issue the following command as root:
+
+~]# grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+
+
+
+
