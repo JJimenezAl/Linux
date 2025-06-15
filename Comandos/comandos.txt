@@ -1,0 +1,2230 @@
+
+    ! introduces a history expansion
+    # event designator denoting the current command
+    $ word designator referring to the last argument
+
+
+ls !$
+#ls a la anterior ruta
+
+#lista carpetas
+ls -d /* #Cuidado aqui es /
+ls -d $(pwd)
+
+#lista ficheros
+
+ls -l | egrep -v '^d'
+
+
+
+
+
+
+ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEA2F6fIom92vq1KotMst4BlT+9ap92yadB5jorzUlXAKyPM5+I+3QbxctYO9WN1C0CzpGmgZtdsf8aS7oKYXZ10jvDkbPBEBvnxRPUtcHXBxl+Nkr/fFEHQM895ACV+3vGtCZiM1nmlytLbvVT65uApa82DbDHzmWKQ+kLlfHCMJk= rsa-key-20120725
+
+
+strace -tp proceso --> ver que esta haciendo un proceso.
+
+
+ping -s 1473 -M do glracp12-priv
+/etc/sysconfig/selinux
+
+Driver tarjeta red --> modinfo be2net
+ps -ef | grep oracle
+
+rpm -qa --queryformat "%{NAME}-%{VERSION}-%{RELEASE} (%{ARCH})\n" | grep libstdc++-devel
+
+export PATH="$PATH:/bin/gcc/"
+
+
+##CRON
+
+Rh 7
+systemctl status.crond.service 
+systemctl stop cond.service
+systemctl start cond.service
+
+echo '* * * * * root echo"hola" 30 120' >>/etc/cron.d/sysstat
+
+crontab -e 
+
+* * * * * /ruta/script.sh 
+
+* * * * * root /ruta.sh >> file 2>&1 para redirigir fallos
+
+crontab -l listar trabajos
+
+cat  /var/spool/anacron/cron.daily arranque anacron 
+
+* * * * * myjob.sh >> /var/log/myjob.log 2>&1
+
+podemos prpobar lo que hay aelecutable con cron en una carpeta con 
+
+run-parts RUTACARPPETA (no del ejecutable)
+
+OJO
+
+Depende que llamada desde cron a scrips poner rutas completas
+Ademas de entorno no carga nada por lo que puede ayudar #!/bin/bash -l
+
+
+
+
+
+will log all output from the cron job to /var/log/myjob.log
+
+Ctrl + l --> Limpiar pantalla.
+Ctrl + r --> Busca recursivamente en los comandos ejecutados anteriormente
+Ctrl + a --> Ir al principio de la linea
+Ctrl + e --> Ir al final de la linea.
+Ctrl + u --> Borrar desde el cursor hasta el principio de la linea
+Ctrl + k --> Borrar desde el cursor hasta el final del linea
+
+#Inicio textop grafico
+
+systemctl set-default multi-user.target # texto
+
+systemd.unit=multi-user.targetid: 5 # par agui  3 texto
+/etc/innitab  
+
+
+iotop --> Escritura en disco.
+Backup --> haciendo un kickstar.
+
+cat /etc/multipath
+last : Este comando permite ver las últimas conexiones que han tenido lugar.
+less : Muestra el archivo de la misma forma que more, pero puedes regresar a la página anterior presionando las teclas “u” o “b”.
+
+'less +F' to view logfiles, instead of 'tail' (ctrl-c, shift-f, q to quit)
+sort : Muestra el contenido de un fichero, pero mostrando sus líneas en orden alfabético. Sintaxis: Sort [opciones] nom_archivo.
+tail : Este comando es utilizado para examinar las últimas líneas de un fich
+sosreport --> reportes de hardware y software, en general todo el sistema.
+mc - mc-4.6.1a-35.el5.x86_64.rpm  --> export LANG=
+
+--> para ver que hay dentro de ficheros comprimios.
+--> navegar graficamente.
+--> copiar fiheros.
+                --> Seleccionar para copiar con el insert.
+                --> Deseleccionar, con el insert otra vez.
+
+
+
+#Tiempos de carga al inicio
+
+systemd-analyze time 
+
+#Tiempos de carga por servicio
+
+systemd-analyze blame
+
+
+
+date --set "2011-11-09 16:04" --> Cambiar fecha y hora.
+
+timedatectl set-time HH:MM:SS
+hwclock --set --date="2011-08-23 09:59" --> Cambiar fecha y hora bios.
+
+
+
+Europe/Madrid
+
+
+Borramos la configuración actual:
+
+rm -f /etc/localtimeY enlazamos con nuestro uso horario:
+
+# ln -s /usr/share/zoneinfo/Europe/Madrid /etc/localtime Automáticamente se habrá corregido el uso horario en el sistema:
+
+# date
+vie mar 18 13:30:10 CET 2011
+
+#solo la hora
+
+date | awk '{print $4}'
+
+date
+
+timedatectl (mas info, ntp...)time 
+
+timedatectl list-timezones
+
+
+timedatectl set-timezone Europe/Madrid
+timedatectl set-ntp 0
+
+timedatectl set-time HH:MM:SS
+timedatectl set-time 13:10:00
+timedatectl set-ntp no/yes
+
+
+systemctl start ntpd
+ntpq -p
+ntpstat
+ntpd -gq 
+
+
+
+
+export http_proxy="http://192.168.200.10:8080"
+
+##Configuracion local, lang = teclado
+
+localectl status
+localectl list-locales
+localectl set-locale lang = Locale
+cat /etc/redhat-release
+
+system-config-securitylevel --> Habilitar o deshabilitar firewall y selinux.
+system-config-httpd
+
+setenforce 0 # selinux centos 7
+sestatus
+find /home -exec sudo setfattr -h -x security.selinux {} \;
+ntsysv --> Servicios.
+
+chmod --> Cambiar permisos.
+
+Symbolic:  r-- -w- --x  |  421
+Binary:    100 010 001  |  -------
+Decimal:    4   2   1   |  000 = 0
+                        |  001 = 1
+Symbolic:  rwx r-x r-x  |  010 = 2
+Binary:    111 101 101  |  011 = 3
+Decimal:    7   5   5   |  100 = 4
+           /   /   /    |  101 = 5
+Owner  ---/   /   /     |  110 = 6
+Group  ------/   /      |  111 = 7
+Others ---------/       |  Binary to Octal chart
+
+#files
+
+find . -type f -exec chmod 0644 {} \;
+
+#folders
+
+find . -type d -exec chmod 0755 {} \;
+
+#Makes the permissions of file2 the same as file1
+
+chmod --reference file1 file2
+
+
+How to set sticky bit permission? (escritura solo par alo que el usuario crea)
+
+# chmod +t [path_to_directory]
+or 
+# chmod 1777 [path_to_directory]
+
+GUID
+chmod 2555 [path_to_file]
+chmod g+s file_name
+chmod g-s file_name
+
+SUID
+chmod 4555 [path_to_file]
+chmod u+s file_name
+chmod u-s file_name
+
+#ver si hay quye hacer umask en .bashrc
+
+Kill -9 PID
+
+jobs --> Ver procesos en segundo plano.
+pwd
+
+
+
+cat /sys/class/fc_host/host3/port_name --> ver el wwn
+
+cat /var/log/messages | grep -i syn
+apropos "partition" --> Busca comandos para.......
+
+id usuario --> Muestra el id, grupos y demas del usuario.
+
+chmod 755 XXXX --> Permisos.
+sudo apt-get install manpages-es --> Instlar man en castellano.
+/var/log/messages
+/var/log/dmesg
+/etc/resolv.conf              
+ls *.txt o también find ./ -name .txt --> Archivos .txt en mi directorio.
+find /home -iname #no diferencia mayusculas
+find . -type f -name "*.out"
+
+
+gludbi01 init.d]$ ./oracleasm listdisks --> Ver discos asm.
+**** -V --> Versión de la aplicación.
+cd /usr/include/ --> Bibliotecas de C.
+
+du -sh * --> Espacio de las carpetas.
+
+du -sch .[!.]* * |sort -h Espacio carpetas ficheros ocultos 
+
+ls -la | egrep ^d --> Lista solo los directorios.
+cat /etc/fstab
+lsb_release -a --> Versión de linux.
+cat /etc/exports --> Exportados por ntfs.
+cal 7 2010
+
+##Copia de ficcheros
+cp -av Fichero1 fichero2 --> Copiar.
+cp -rv carpeta /ruta/otra/* Copia reecursivo con verbose
+cp -n no sobreescrine en destino 
+du -sxh ruta --> Tamaño de ficheros.
+
+cat /var/log/messages | less
+ls -lt --> Lista por fecha de modificación.
+
+#cat ultimo fichero
+ls -t | head -1 | xargs cat
+//////rm//// -fv --> Borrar sin pedir confirmacion.
+wc -l /var/log/messages --> Cuenta las lineas de un fichero.
+
+chgrp -R cluster /opt/cluster --> Cambia el grupo recursivamente.
+
+watch free --> Ver el free cada 2 segundos.
+lsmod | grep modulo --> Ver si esta cargado el modulo x.
+man -L es ping --> Man en castellano.
+cd /usr/bin/ y cd /bin --> Ruta ejecutables.
+
+service vncserver start
+vncpasswd
+vncserver :2
+
+service vncserver start
+vncpasswd
+
+
+cd /etc/sysconfig/network-scripts/
+ethtool eth0 | grep "Link detected:"
+/etc/modules.conf 
+
+
+fuser ruta --> Que se esta ejecutando sobre una ruta.
+fdisk -l
+lsmod Lista los módulos cargados.
+set --> Ver variables.
+
+
+COMPARTIR FS
+/etc/exports --> que queremos exportar
+/backup     *(rw,no_root_squash,async)
+Servicio portmap y nfs corriendo.
+Montarlo.
+
+showmount -e server
+
+
+NFS
+ sudo yum install nfs-utils (Red Hat or CentOS)
+ sudo apt-get install nfs-common (Ubuntu)
+ sudo zypper install nfs-client (SUSE)
+
+
+
+mkdir /storage
+cat /etc/exports
+/storage        *(fsid=0,rw,sync,no_root_squash,no_subtree_check,crossmnt)
+
+service nfs start
+
+#RExporta sin reiniciar maquina
+Exportfs -ra
+#Versiones
+ nfsstat -c
+ rpcinfo -p localhost
+
+
+
+perl -MCPAN -e 'install DBD::Oracle' 
+cpan -a --> Ver modulos instalados.
+
+
+Matar sesion usuario.
+ps -fea / Buscar el bash
+kill -9 <PID> 
+
+
+
+netstat : Muestra las conexiones y puertos abiertos por los que se establecen las comunicaciones.
+set : Para ver las variables de entorno.
+
+
+uptime : Nos indica el tiempo que ha estado corriendo la máquina.
+whereis : devuelve la ubicación del archivo especificado, si existe. Sintaxis: whereis nomb_archivo.
+ls -lh : Lista ficheros especificando la unidad de tamaño (Kilobyte, Megabyte, Gigabyte).
+
+
+
+cat /proc/net/bonding/bond0
+
+
+
+
+
+
+Ver intentos acceso server --> grep "Failed password for " /var/log/secure* | sed "s/invalid user //" | tr -s " " | awk '{print $11" "$9}' | sort | uniq -c | sort -n | tail -25
+con lastb sale lo mismo?
+
+Comandos Linux
+
+
+
+
+Empaquetado y compresión:
+
+zcat is a command that can be used to dump an extracted file from a .gz file to stdout
+without manually extracting it
+
+
+NOTA: r equivale en todos los casos a recursivo
+Ficheros Zip
+zip -r fichero.zip fichero __________________ Comprimir fichero a fichero.zip
+unzip archivo.zip _________________________ Descomprimir zip
+unzip -v archivo.zip _______________________ Ver contenido zip
+Ejemplo: zip -r musica.zip ./musica/
+Ficheros Rar
+unrar e -r archivo.rar ___________________ Descomprimir rar (se extrae en el directorio actual)
+unrar x -r archivo.rar DirDestino __________ Descomprimir rar: (x extrae donde se indique)
+unrar v archivo.rar _____________________ Ver contenido rar
+Ficheros Gz
+gzip -r fichero _________________________ Comprimir gz
+gzip -d fichero.gz ______________________ Descomprimir gz
+gzip -c fichero.gz ______________________ Ver contenido gz
+Ejemplo: gzip -r ./sinatra
+Ficheros Bz2
+bzip2 fichero ___________________________ Comprimir bz2
+bzip2 -d fichero.bz2 _____________________ Descomprimir bz2
+bzip2 -c fichero.bz2 _____________________ Ver contenido bz2
+Ejemplo: bzip2 ./sinatra/*.ogg
+Nota: Mientras que zip comprime y empaqueta,gzip ó bzip2 sólo comprimen
+ficheros, no directorios, para eso existe tar.
+Ficheros Tar
+tar -vcf archivo.tar /fichero1 /fichero2 ______ Empaquetar (fichero puede ser directorio)
+tar -vxf archivo.tar _______________________ Desempaquetar
+tar -vtf archivo.tar _______________________ Ver contenido
+Para comprimir varios ficheros y empaquetarlos en un solo archivo hay que combinar el tar y el gzip o el bzip2 de la siguiente manera:
+Ficheros tar.gz (tgz)
+tar -zvcf archivo.tgz directorio ___________ Empaquetar y comprimir
+tar -zvxf archivo.tgz ____________________ Desempaquetar y descomprimir
+tar -zvtf archivo.tgz ____________________ Ver contenido
+Ficheros tar.bz2 (tbz2)
+tar -jvcf archivo.tbz2 directorio ___________ Empaquetar y comprimir
+tar -jvxf archivo.tbz2 ______________________ Desempaquetar y descomprimir
+tar -jvtf archivo.tbz2 ______________________ Ver contenido
+
+mkdir nuevacarpeta
+
+mkdir -p ./project/{prod,dev,test}/{doc,bin}
+tar -vzxf file.tgz -C nuevacarpeta
+
+tar -cf arch.tar * --exclude "*.txt"
+Opciones de tar:
+-c : crea un nuevo archivo.
+-f : cuando se usa con la opción -c, usa el nombre del fichero
+especificado para la creación del fichero tar.
+cuando se usa con la opción -x,retira del archivo el fichero
+especificado.
+-t : muestra la lista de los ficheros que se encuentran en el fichero tar.
+-v : muestra el proceso de archivo de los ficheros.
+-x : extrae los ficheros de un archivo.
+-z : comprime el fichero tar con gzip.
+-j : comprime el fichero tar con bzip2.
+--totals:Print the total bytes copied
+
+#crear fichero tamaño
+dd if=/dev/urandom of=sample.txt bs=1G count=1
+dd if=/dev/zero of=file.txt count=1024 bs=1048576 where 1048576 bytes = 1Mb
+
+In order to append filea only if filea has newer modification time than filea inside
+archive.tar, use:
+tar -uvvf archive.tar filea
+
+#cpio
+cpio is another archiving format similar to tar. It is used to store files and directories in a file
+with attributes such as permissions, ownership, and so on. But it is not commonly used as
+much as tar. However, cpio seems to be used in RPM package archives, initramfs files for
+the Linux kernel, and so on. This recipe will give minimal usage examples of cpio.
+
+#lzma is comparatively new when compared to gzip or bzip2. lzma offers better
+compression rates than gzip or bzip2
+lzma filename
+unlzma filename.lzma
+
+##squashfs is a heavy-compression based read-only filesystem
+sudo mksquashfs /etc test.squashfs
+mkdir /mnt/squash
+# mount -o loop compressedfs.squashfs /mnt/squash
+
+
+
+cat file | lzma -c > file.lzma
+-c is used to specify output to stdout.
+tar -xvvf --lzma archive.tar.lzma -C extract_directory
+
+Sistema:
+man comando, man –help, info comando —- Muestra información sobre el comando.
+help comando ————————- Muestra información sobre un comando interno del shell(bash).
+apropos palabra_clave ————— Busca dentro de las descripciones de man la palabra clave.
+apropos -e palabra_clave ————- Busca la palabra exacta.
+cal -my —————————— Muestra el calendario.
+uptime ——————————- Muestra la hora,tiempo de funcionamiento, nº usuarios conectados y la carga media.
+#en minutos
+
+uptime | awk -F ',' ' {print $1} ' | awk ' {print $3} ' | awk -F ':' ' {hrs=$1; min=$2; print hrs*60 + min} '
+#saca mejor este
+#uptime | awk -F ',' ' {print $1" "$2}'|awk ' {print $3" "$4" "$5}' | sed '1,$s/:/ /' | awk ' {if ($4 =="user") print $1*60 + $2;else if ($2=="mins") print $1;else print $1*24*60 + $2*60 + $3}'
+
+cat /proc/uptime | awk '{print $1}' # en segundos
+
+
+tzselect ——————– Programa interactivo que permiten selecionar la zona horaria.
+grep UTC /etc/default/rcS ———— Comprobamos si el reloj hardware mantiene la hora local o universal (UTC)
+date ——————————— Muestra la fecha y hora del sistema,en formato local.
+date -u —————————— Muestra la fecha y hora en formato UTC(Tiempo Universal Coordinado).
+hwclock –show ———————– Muestra el reloj harware (también llamado reloj de la BIOS y reloj CMOS).
+hwclock -systohc ——————— Pone el reloj harware a la hora del sistema.
+ntpdate servidor NTP —————– Ajusta directamente la hora del sistema sincronizándola con la de un servidor NTP.
+ntpd ——————————— Demonio que ajusta el reloj de forma gradual sincronizándolo con servidores NTP.
+watch -n tiempo comando ————– Ejecuta un comando cada x segundos (2 por defecto).
+watch -n 1 date ———————- Igual que date pero en este caso veríamos correr los segundos.
+clear ——————————– Limpia la pantalla.
+reset ——————————– Restaura la Consola.Útil para cuando empiezan a aparecer caracteres raros.
+uname -a —————————– Versión del kernel
+hostname —————————– Visualiza el nombre de la máquina.
+tty ———————————- Muestra el nombre de fichero de la terminal conectada a la salida estándar.
+
+
+#---------------------
+Tiempo de ejeucion
+
+time comando
+time - o output.txt command
+
+
+Control de Procesos:
+ps aux ——————————- Muestra información de los procesos en curso.
+ps -eLf  ——————————- Muestra información de los procesos en curso CON HILOS .
+top ———————————- Muestra información de los procesos en curso.(tecla z colorea los activos)
+pstree——————————– Muestra los procesos en curso en árbol.
+pidof comando ———————— Busca el ID de un programa que se está ejecutando.
+killall proceso ———————- Para un proceso.
+strace comando ———————– Muestra las llamadas al sistema originadas por un proceso.
+fuser -v archivo ——————— Muestra los procesos que están usando un fichero o directorio.
+Control de ejecución:
+comando &—————————– Ejecuta un comando en segundo plano(background),permitiendonos seguir usando el promp.
+jobs ——————————– Lista los procesos en segundo plano identificándolos con un nº de tarea.
+fg nº ——————————– Pasa a primer plano (foreground)un proceso
+bg ———————————– Pasa a background un proceso que hemos suspendido temporalmente tecleando Ctrl-z
+Disco duro:
+du -h fichero ———————— Muestra espacio ocupado en disco,del directorio en curso si no indicamos nada.
+df ———————————– Muestra información sobre particiones montadas.
+cfdisk ——————————- Muestra información sobre particiones.Herramienta para particionar en ncurses.
+fdisk -l —————————– Muestra información sobre particiones.Herramienta para particionar.
+
+quota ——————————– Programa que gestiona/limita el uso que hacen del disco los usuarios/grupos.
+Entorno:
+locale ——————————- Muestra la zona geográfica configurada.
+dpkg-reconfigure locales ————- Reconfigura los locales.
+dpkg-reconfigure console-data ——– Reconfigura el teclado.
+loadkeys ruta_mapa_teclado.gz ——– Carga el mapa de teclado que le indicamos,que estará en:/usr/share/keymaps
+locale charmap ———————– Muestra el código de caracteres en uso.
+set ———————————- Muestra las variables locales definidas
+env ———————————- Muestra las variables de entorno definidas.
+ps -U root --no-headers -o rss | awk '{ sum+=$1} END {print int(sum/1024) "MB"}' --------------RAM por usuario
+udevadm info -a -n /dev/sdc
+#usb 3
+REscaneo por dispositivo
+
+cd /sys/bus/pci/drivers/xhci_hcd
+echo -n "0000:00:xx.y" > unbind
+echo -n "0000:00:xx.y" > bind
+
+
+
+
+
+########## ########## ########## ########## ########## ########## ########## ########## ########## ########## 
+########## ########## ########## ########## ########## ########## ########## ########## ########## ########## 
+########## ########## ########## ########## ########## ########## ########## ########## ########## ########## 
+########## ########## ########## ########## ########## ########## ########## ########## ########## ########## 
+
+---------- TRABAJAR CON PAQUETES ----------
+
+rpm -qa --queryformat "%{NAME}-%{VERSION}-%{RELEASE} (%{ARCH})\n" | grep libstdc++-devel
+# rpm -ql 
+# rpm -ivh imagen para instalar
+# rpm -Uvh imagen para actualizar
+# rpm -qa --> ver paquetes instalados.
+# rpm -qa | grep paquet --> Buscar un paquete especifico.
+# rpm -qa --queryformat "%{NAME}-%{VERSION}-%{RELEASE} (%{ARCH})\n" | grep sys
+# rpm -e paquete --> Desisntalar.
+# rpm -Fvh *.rpm --> Actualiza un paquete sólo si ya existe una versión anterior instalada.
+# rpm -qf filename --> Que paquete instalo un determinado fichero.
+# rpm -ql nombre_paquete --> Ver todos los ficheros instalados por un paquete.
+# rpm -qlp fichero_paquete.rpm --> Listar los ficheros que serán instalados con el paquete.
+# rpm -qi kernel --> Descripción y otras informaciones sobre un determinado paquete.
+# rpm -V nombre_paquete --> Verificar si un fichero ha cambiado desde la instalación de un paquete
+#Extract src.rpm
+rpm2cpio glibc-2.17-317.el7.src.rpm  | cpio -idmv
+
+#Desempaquetar
+#mkdir NOMBREDEPROGRAMA_src_rpm
+# cd NOMBREDEPROGRAMA_src_rpm
+# rpm2cpio ../NOMBREDEPROGRAMA-*.src.rpm | cpio -i
+
+
+#Crear paquete
+
+mv nano-1.2.5.tar.gz ~/rpmbuild/SOURCES/
+cd ~/rpmbuild/SPECS/
+rpmbuild -ba nano.spec
+rpmbuild -ba --clean --sign nano.spec
+
+
+
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+--------------YUM--------------
+
+yum provides */netstat
+
+yum provides fi
+yum whatprovides binario o libreria
+
+
+rpm -qL Paquete 
+
+rpm -qa --last
+
+#query a file
+
+rpm -qf /usr/bin/htpasswd
+#Query information of installed
+rpm -qi vsftpd
+
+#Information before installing
+
+rpm -qip sqlbuddy-1.3.3-1.noarch.rpm
+
+#Query doc
+
+rpm -qdf /usr/bin/vmstat
+
+#Verify
+
+rpm -Vp sqlbuddy-1.3.3-1.noarch.rpm
+#Type the following command to verify all the installed rpm packages.
+rpm -Va
+#CHECK dpendencies before installing
+rpm -qpR Algo.rpm
+
+#list all files of installed
+
+#REBUILD DATABASE
+
+root@tecmint]# cd /var/lib
+[root@tecmint]# rm __db*
+[root@tecmint]# rpm --rebuilddb
+[root@tecmint]# rpmdb_verify Packages
+
+Cron con yum para updates en seguridad
+
+
+
+
+---------- VARIOS ----------
+
+# echo . Buenos días, si reinicias el servidor, por favor avisa . >> /dev/pts/0 --> Enviar mensaje por consola.
+
+
+
+
+# for i in 1 to 255
+# > do ping 192.168.3.${i}
+# > done
+# for i in 1 2 3 4 5; do ping 192.168.3.${i}; done
+# for i in {1..255}; do ping 192.168.3.$i; done
+# /etc/inittab --> id:3:initdefault: --> Modo de arranque.
+
+
+lsof  /software/windonefiles --> Ver accesos a una ruta.
+lsof ruta --> Que se esta ejecutando sobre una ruta.
+lsof -u root --> ver los ficheros abiertos por el usuario root.
+fuser /software/windonefiles --> Ver accesos a una ruta.
+
+# ./my-shell-script.sh & --> Ejecutar en segundo plano.
+# at -f backup.sh 10 am tomorrow --> Using at command you can schedule a job to run at a particular date and time. For example, to execute the backup script at 10 a.m tomorrow.
+# watch df -h --> To execute a command continuously at a certain interval, use watch command as shown below.
+# tail -f /var/log/xxxx --> ver los logs en el momento.
+# tail -f /var/log/syslog -f /var/log/auth.log --> View Multiple Log Files in One Terminal
+
+
+
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- MAIL ----------
+
+# echo "Texto mail" | mail -s "Asunto" @.com
+# echo "Texto mutt" | mutt -s "Asunto" @.com
+# echo "Cuerpo mensaje" | mutt -s "Asunto .."  -a Prueba ..com
+# echo "Cuerpo mensaje" | mutt -s "Asunto .."  -a /Prueba @..com
+# echo "Cuerpo mensaje" | mutt -s "Asunto .." d..com
+
+
+#postconf mail_version | awk -F" = " '{print $2}'
+
+postconf -e disable_vrfy_command=yes
+postconf -e mynetworks="127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128"
+postconf -e smtpd_helo_required=yes
+
+echo “test” | mail -s “test” aaaa@bbbbbb.com
+
+mailq
+#VEr mensajes en cola
+
+#vaciar todas las colas
+postsuper -d ALL
+
+#vaciar una cola
+postsuper -d mail_queue_id
+
+#ver sms
+
+postcat -vq ID
+
+#Procesar la cola
+
+postqueue -f
+
+
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- COMANDOS CLUSTER ----------
+
+# clusvcadm -e SAP --> Levantar el cluster.
+# clusvcadm -d SAP --> Parar el servicio de cluster.
+# clusvcadm -r SAP --> Cambiar el cluster de nodo.
+# clusvcadm -Z SAP --> Congelar el servicio de cluster. 
+# clusvcadm -U SAP --> Descongelar el cluster.
+# clustat
+# cat /var/log/rgmanager.log
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- INSTALACIONES NUEVAS ----------
+
+/sbin/chkconfig acpid off            
+/sbin/chkconfig apmd off
+/sbin/chkconfig atd off
+/sbin/chkconfig autofs off
+/sbin/chkconfig avahi-daemon off
+/sbin/chkconfig bluetooth off
+/sbin/chkconfig cpuspeed off
+/sbin/chkconfig cups off
+/sbin/chkconfig firstboot off
+/sbin/chkconfig gpm off
+/sbin/chkconfig hidd off
+/sbin/chkconfig hplip off
+/sbin/chkconfig ip6tables off
+/sbin/chkconfig iptables off
+/sbin/chkconfig irqbalance off
+/sbin/chkconfig kudzu off
+/sbin/chkconfig lvm2-monitor off
+/sbin/chkconfig mcstrans off
+/sbin/chkconfig mdmonitor off
+/sbin/chkconfig microcode_ctl off
+/sbin/chkconfig netfs off
+/sbin/chkconfig nfslock off
+/sbin/chkconfig yum-updatesd off
+/sbin/chkconfig xinetdoff
+/sbin/chkconfig smartd off
+/sbin/chkconfig readahead_early off
+/sbin/chkconfig restorecond off
+/sbin/chkconfig rpcidmapd off
+/sbin/chkconfig rpcgssd off
+/sbin/chkconfig nfslock off
+/sbin/chkconfig pcscd off
+/sbin/chkconfig multipathd on
+
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- MONITORIZAR ----------
+
+---- sar ----
+
+sar -n DEV utilizacion red.
+# sar –u Utilización de la CPU. ejemplo: sar –u 10 3
+# sar –r Utilización de memoria. Ejemplo: sar –r 5 10
+# sar –d Utilización de los discos.
+# sar -b. Actividad de la caché.
+# sar -c. Llamadas al sistema.
+# sar -g. Información de pageout.
+# sar -p. Información de pagein.
+# sar -q. Estadísticas sobre la cola de procesos en espera de CPU.
+# sar -w. Estadísticas de actividad de swapping.
+
+# cat /proc/meminfo ——————– Información sobre la memoria.
+# cat /proc/cpuinfo ——————– Información sobre el procesador.
+# cat /proc/devices ——————– Información sobre dispositivos en uso.
+
+# mpstat -P ALL --> Ver trabajo todos los procesadores.
+
+# time du -sh -->Medir el tiempo que toma ejecutar un comando
+
+# jobs --> ver procesos en 2 plano.
+
+# kill %1 --> Para matar un proceso en segundo plano usaremos el comando kill, pasándole como argumento el número de tarea.
+
+# ps -e -o pcpu,cpu,nice,state,cputime,args --sort pcpu | sed '/^ 0.0 /d' --> Linux: Listar procesos por % cpu o uso de memoria
+
+# top --> Ver los procesos que estan corriendo.
+
+# mpstat 2 50 --> mpstat (Multi Processor Statistics). En sistemas multiprocesador, muestra un informe de actividad desglosado por procesador.
+
+# /sbin/ldconfig -p --> Librerias instaladas.
+
+# lsmod --> Modulos cargados.
+
+sar --> colecta, reporta o guarda información de actividad del sistema.
+mpstat --> reporta las estadísticas asociadas a los procesadores.
+iostat --> reporta las estadísticas del CPU y las estadisticas de entrada/salida de dispositivos, particiones y sistemas de archivos en red (NFS).
+w --> Muestra quien esta conectado al sistema y que esta haciendo. 
+vmstat - Monitoreo procesos, CPU, memoria y problemas de I/O.
+watch -n 1 -d free --> Comando free cada n segundo y marcando los cambios.
+watch – Ejecuta un comando periódicamente.
+ps – Identifica sesiones con CPU y memoria altos. Se usa para identificar sesiones que consumen muchos recursos.
+ps -ef | grep java
+
+mpstat – Reporta estadísticas de cpu.
+free – Despliega la memoria disponible y en uso.
+
+netstat – Despliega estadísticas de red
+ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10 --> Consumos.
+
+Ver tamano de página swapping
+pidof process
+grep --color VmSwap /proc/11099/status
+
+for file in /proc/*/status ; do awk '/VmSwap|Name/{printf $2 " " $3}END{ print ""}' $file; done | sort -k 2 -n -r | less
+
+
+---------- TAR ----------
+
+# $ tar cvf archive_name.tar dirname/ --> Create a new tar archive.
+# $ tar xvf archive_name.tar --> Extract from an existing tar archive.
+# $ tar tvf archive_name.tar --> View an existing tar archive.
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- WHEREIS ----------
+
+# $ whereis perl --> Dónde están los binarios, sources o manuales de perl.
+# perl: /usr/bin/perl /etc/perl /usr/lib/perl /usr/share/perl /usr/share/man/man1/perl.1.gz
+
+# $ whereis -u -M /usr/man/man1 -S /usr/src -f * --> Buscar el manual de los ficheros del directorio en el que nos encontramos.
+
+# $ whereis -b top --> Dónde está el binario de top.
+# top: /usr/bin/top
+
+# $ whereis -m top --> Donde esta el manual de top.
+# top: /usr/share/man/man1/top.1.gz
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- RECUPERAR ARCHIVOS BORRADOS ----------
+
+Recuperar archivos borrados en linux
+Este mètodo solo es válido para ext2.
+Como root:
+desmonta la unidad:
+# umount  /dev/hda1)
+# debufs -w /dev/hda1
+# lsdel
+Esto te dara una lista de inodos borrados. Seguramente mas de los que quieres.
+Mira un poco las fechas, sino puedes hacer:
+# stat <numerodeinode>
+Y te dira cosillas sobre cada inode. Quizas eso te sirva para saber lo que quieres recuperar.
+Una vez que lo sepas
+# dump <numerodeinode> nombredelficherodondeloquierasguardar.
+Una cosa mas. debugfs -f fichero ejecuta los comandos que le pongas en el fichero. asi puedes hacerlo mas rapido. te haces un fichero con todos los dumps que quieras hacer y luego lo ejecutas de una vez.
+
+
+
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- FULL BACKUP ----------
+
+# mkdir backup
+# cd /backup
+# tar cvpjf backup.tar.bz2 –exclude=/proc –exclude=/lost+found –exclude=/backup.tar.bz2 –exclude=/mnt –exclude=/sys / -exclude=/tmp
+Y listo. Con eso, se creará un archivo llamado backup.tar.bz2 dentro de dicha carpeta, el cual contiene todo tu sistema. Si querés excluir otros directorios del blackup como por ejemplo el /home, solo agregar “-exclude=/home” al final del comando.
+Luego, para recuperar:
+# tar xvpfj backup.tar.bz2 -C /
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- XEN ----------
+
+Si queremos que el cambio sea permanente editamos el fichero /etc/sysctl.conf añadiendo la siguiente línea:
+# xen.independent_wallclock = 1
+# echo 1 > /proc/sys/xen/independent_wallclock
+
+#echo 1 > /proc/sys/xen/independent_wallclock
+# cat <<EOF >>/etc/sysctl.conf
+# #Parametros introducidos para que no se la hora de xen
+# xen.independent_wallclock = 1
+# EOF
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+#HARDWARE
+
+rhel 7 lshw
+antes hwbrowser
+
+
+---------- DMIDECODE  ----------
+
+dmidecode --type 17 --> ver hardware
+
+     Type   Information
+     ----------------------------------------
+        0   BIOS
+        1   System
+        2   Base Board
+        3   Chassis
+        4   Processor
+        5   Memory Controller
+        6   Memory Module
+        7   Cache
+        8   Port Connector
+        9   System Slots
+       10   On Board Devices
+       11   OEM Strings
+       12   System Configuration Options
+       13   BIOS Language
+       14   Group Associations
+       15   System Event Log
+       16   Physical Memory Array
+       17   Memory Device
+       18   32-bit Memory Error
+       19   Memory Array Mapped Address
+       20   Memory Device Mapped Address
+       21   Built-in Pointing Device
+       22   Portable Battery
+       23   System Reset
+       24   Hardware Security
+       25   System Power Controls
+       26   Voltage Probe
+       27   Cooling Device
+       28   Temperature Probe
+       29   Electrical Current Probe
+       30   Out-of-band Remote Access
+       31   Boot Integrity Services
+       32   System Boot
+       33   64-bit Memory Error
+       34   Management Device
+       35   Management Device Component
+       36   Management Device Threshold Data
+       37   Memory Channel
+       38   IPMI Device
+       39   Power Supply
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- PARAR REINIAR ETC ----------
+
+# init 0 --> Apaga la máquina.
+# init 6 --> Reinicia la máquina.
+# shutdown -h now --> Shutdown the system and turn the power off immediately.
+# shutdown -h now "Mensaje" --> Apaga la maquina y manda mensaje a los que estan conectados.
+# shutdown -h +10 --> Shutdown the system after 10 minutes.
+# shutdown -r now --> Reboot the system using shutdown command.
+# shutdown -Fr now --> Force the filesystem check during reboot.
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- TRABAJAR FICHEROS ----------
+
+cat -n fichero : Muestra el contenido de un fichero.(-n lo numera).
+vim +143 filename.txt --> Ir a la linea 143 del fichero
+vim +/search-term filename.txt --> Va a la primera coincidencia de la busqueda.
+vim -R /etc/passwd --> Abre el fichero en solo lectura.
+sort names.txt --> Ordena un fichero ascendente.
+sort -r names.txt --> Ordena un fichero descendente.
+!:s/foo/ba
+!:gs/foo/bar --> to replace all instances, and not just the first.
+^find^replace -->for example:
+fmt -u text.txt
+this has different spaces
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- KERNEL LOGS HARDWARE ----------
+
+uname -a —————————– Versión del kernel.
+cat /proc/version ——————– Versión del nucleo y compilador empleado.
+lsmod ——————————– Lista los módulos cargados.
+cat /proc/modules ——————– Lista los módulos cargados.
+lsmod | grep módulo —————— Ver si está cargado el módulo.
+modinfo módulo ———————– Muestra información sobre un módulo.
+modprobe módulo ———————- Inserta un módulo en el kernel cargando antes los módulos de los cuales dependa.
+modprobe -r módulo ——————- Elimina un módulo del kernel y si procede los que dependen del mismo.
+insmod módulo ———————— Inserta un módulo en el kernel.
+rmmod módulo ————————- Elimina un módulo del kernel.
+echo módulo >> /etc/modules ———- Inserta un módulo en el kernel de forma permanente.
+depmod módulo ———————— Comprueba las dependencias del módulo.
+modconf —————————— Programa gráfico para listar,cargar y descargar módulos del kernel.
+alsaconf —————————– Programa interactivo que detecta las tarjetas de audio y carga los modulos adecuados.
+less /var/log/kern.log ————– Mensajes del nucleo.
+less /var/log/syslog ————— Registro de mensajes relativos a la seguridad.
+less /var/log/debug —————– Registro de información de depuración de los programas.
+less /var/log/messages ————— Mensajes del sistema de carácter informativo.
+less /var/log/user.log ————– Información del usuario.
+less /var/log/Xorg.0.log ———— Información sobre las X
+less /var/log/auth.log ————– Accesos al sistema(incluye los intentos fallidos).
+last ——————————— Lista los usuarios conectados/desconectados (fichero /var/log/wtmp).
+last –f /var/log/wtmp
+last USER
+last reboot
+
+lastb ——————————– Muestra los intentos de conexión fallidos (fichero /var/log/btmp).
+hdparm /dev/hda ———————- Verificar DMA
+hdparm -I /dev/hdx ——————- Información sobre hdx
+hdparm -d1 /dev/hdx —————— Activar DMA en el cd - duro o periférico.
+hdparm -Tt /dev/hdx  ------------Velocidad  
+dmesg ——————————– Ver la salida que el kernel produjo en el arranque.
+dmesg | grep hd ———————- Información sobre dispositivos IDE.
+sensors-detect ———————– Detecta,instala y carga los sensores y los módulos necesarios(en un kernel 2.6)
+sensors —————————— Tras ejecutar el anterior,muestra temperaturas, voltajes y revoluciones de ventilador.
+lspci ——————————– Ver dispositivos conectados a la placa madre mediante un bus PCI.
+lsusb ——————————– Ver los buses USB y los dispositivos conectados a los mismos.
+
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- SERVICIOS ----------
+
+# chkconfig --list --> View Current Status of Startup Services
+# chkconfig --list | grep 3:on --> ver el listado con los que tienen en el nivel 3 on.
+# chkconfig --list | grep ntpd --> Ver en que niveles arranca el servicio x.
+# chkconfig --list --> Ver servicios en niveles de arranque.
+# chkconfig --level 235 ntpd on --> Servicios en el arranque.
+# chkconfig --add iptables --> Añadir un servicio en el inicio.
+# chkconfig --del ip6tables --> Remover un servicio en el inicio.
+
+#SCRIPT Inicio
+
+
+metemos linea al script en /etc/rc.d/rc.local
+
+chmod +x /etc/rc.d/rc.local
+systemctl enable tc-local
+
+# /etc/init.d/servicio stop ———— Para un servicio/demonio
+# /etc/init.d/servicio start ———– Inicia un servicio/demonio.
+# /etc/init.d/servicio restart ——— Reinicia un servicio/demonio.
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- HISTORY ----------
+
+# HISTTIMEFORMAT=’%F %T’
+# export HISTTIMEFORMAT
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ----------
+
+---------- MONTAR Y DESMONTAR ----------
+
+# mount --> Vemos el listado de dispositivos montados.
+# mount punto de montaje --> Monta un dispositivo.(ya establecido en el fstab)
+# umount p.de montaje --> Desmonta un dispositivo.(ya establecido en el fstab)
+# mount -t nfs 192.168.72.160:/software /mnt/cdrom
+# mount //172.19.208.82/f /mnt/cdrom
+# mount -o remount /XXXX --> remontar la partición.
+# mount -o remount /home --> Remonta es FS.
+# mount -o loop fichero.iso /mnt/aux
+# mount -t cifs //192.168.200.122/av -o username=cifs,password=****** /tmp/av
+# mount -o loop rhel7.iso /mnt
+#Volver a ejecutar /etc/fstab con verbose 
+#mount -av 
+#formatea fat32
+sudo mkfs.vfat -F 32 -n Mi_Memoria /dev/sdc1
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- FIND ----------
+
+find . -exec grep -l texto_a_buscar {} \;
+find /usr -name lilo -print : Busca todos los ficheros con nombre lilo en /usr.
+find / home -user mario --> Busca bajo /home todos los archivos que pertenezcan al usuario mario
+find --> Para buscar.
+find / -name fstab
+find / -name "[0-9]*"     (todo lo que empieze con un dígito)
+find / -name "[Mm]*"      (todo lo que empieze con un la letra M o m)
+find / -name "[a-m]*.txt" (todo lo que empieze entre a y m y termine en ".txt")
+
+Syntax: find [pathnames] [conditions]
+# find /etc -name "*mail*" --> Busca en /etc todos los ficheros que contengan mail en su nombre.
+# find / -type f -size +100M --> Buscat todos los ficheros en la ruta x mas grandes de 100M.
+# find . -mtime +60 --> Buscar ficheros modificados hace mas de 60 días.
+# find . –mtime -2 --> Buscar ficheros modificados en los ultimos 2 días.
+# find / -type f -name *.tar.gz -size +100M -exec ls -l {} \; --> How to delete all the archive files with extension *.tar.gz and greater than 100MB?
+find . -inum xxxx -delete
+find . -name 2.txt | xargs ls -lia
+
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- SCP Y SSH ----------
+lftp username@ftphost
+sftp -oPort=422 user@slynux.org
+scp /xxxxxxxxxxxx ip:/xxxxxx
+scp user@remotehost:/home/path/filename filename
+scp -rpC /home/meteoadm/*  root@192.168.172.60:/home/meteoadm/
+scp prueba.txt root@192.168.12.40:/var
+ssh nombremaquina 'comando a ejecutar' --> no queda en el registro.
+ssh $HOST ls; pwd; cat /path/to/remote/file
+ssh linuxtechi@192.168.10.10 "uname;hostname;date"
+sh -D <port number> user@remotehost  Dynamic port forwarding o usarlo tipo proxy para saltarme restricciones.
+scp /usr/local/nagios/libexec/* nagios@172.169.2.16: /usr/local/nagios/libexec/
+
+scp -r /usr/local/nagios/libexec  nagios@172.16.2.18:/usr/local/nagios/libexec/
+scp usuario@ip:/capeta/carpeta/ /home/...../
+scp -r carpeta/ usuario@ip:/carpeta2/carpeta3/ (recursivo) 
+# me creara carpeta del origen en carpeta3
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout mykey.key -out mycert.pem
+Lista usuarios con ssh 
+lsof -i -n | egrep '\<sshd\>' | grep ESTABLISHED
+
+Matar todas las sesiones de un usuario
+ps -ef | grep sshd | grep nombre_usuario | grep -v grep | awk '{print "sudo kill -9", $2}' |sh
+
+ssh user@remote_host "COMMANDS" > stdout.txt 2> errors.txt
+
+ssh-keygen
+Both keys are stored in the ~/.ssh/ directory:
+~/.ssh/id_rsa.pub - public key
+~/.ssh/id_rsa - private key
+ssh-copy-id USER@hostname
+
+#Compression
+ssh -C user@hostname COMMANDS
+#Redirect echo "text" | ssh user@remote_host 'cat >> list'
+# Redirect data from file as:
+$ ssh user@remote_host 'cat >> list' < file
+
+1.6.3.3. Disabling SSH Root Login
+To increase system security, you can disable SSH access for the root user, which is enabled by
+default.
+For more information on this topic, see Red Hat Enterprise Linux 7 Security Guide.
+Procedure 1.4. Disabling SSH root login
+1. Access the /etc/ssh/sshd_config file:
+~]# vi /etc/ssh/sshd_config
+2. Change the line that reads #PermitRootLogin yes to:
+PermitRootLogin no
+3. Restart the sshd service:
+~]# systemctl restart sshd
+
+
+Redireccion X11 
+#Cuando no funciona al conectarte con otro usuario
+copiado root/.Xauthority y dandole permisos
+
+probar
+
+xauth list $DISPLAY
+node01.thegeekdiary.com/unix:10  MIT-MAGIC-COOKIE-1  dacbc5765ec54a1d7115a172147866aa
+# echo $DSIPLAY
+localhost:10.0
+
+sudo su - [user]
+# xauth add node01.thegeekdiary.com/unix:10  MIT-MAGIC-COOKIE-1  dacbc5765ec54a1d7115a172147866aa
+
+4. Export the display from step 2 again for the sudo user. Try the command xclock to verify if the x client applications are working as expected.
+
+# export DISPLAY=localhost:10.0
+
+---------- SSH SIN PASSWORD ----------
+
+# ssh-keygen
+# ssh-copy-id -i ~/.ssh/id_rsa.pub remote-host
+ssh -i ~/.ssh/mykey user@host
+
+#de manera mnual
+
+ssh-keygen -t rsa
+ssh USER@REMOTE_HOST "cat >> ~/.ssh/authorized_keys" < ~/.ssh/id_rsa.pub
+
+##Si coge .pub por defecto en vez de la privada
+
+It appears that you're trying to use the wrong key file. The file with the ".pub" extension is the public key file. The corresponding file without the ".pub" extension is the private key file. When you run an ssh client to connect to a remote server, you have to provide the private key file to the ssh client.
+You probably have a line in the your .ssh/config file (or /etc/ssh_config) which looks like this:
+IdentityFile .../.ssh/vm/vm_id_rsa.pub
+You need to remove the ".pub" extension from the filename:
+IdentityFile .../.ssh/vm/vm_id_rsa
+
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- TRABAJAR CON FICHEROS ----------
+
+Trabajo con ficheros:
+ls __________________________ Lista los ficheros de un directorio concreto.
+ls -l ________________________ Lista también las propiedades y atributos.
+ls -la _______________________ Lista ficheros incluidos los ocultos de sistema.
+ls -la | more ________________ Lista los ficheros de un directorio de forma paginada.
+#alias
+alias | grep -E ' l=| la='
+type -a ls
+
+cat -n fichero ______________ Muestra el contenido de un fichero.(-n lo numera).
+whereis ejecutable _________ Busca ejecutables(ejemplo: whereis ls).
+type comando ______________ Muestra la ubicación del comando indicado.
+pwd _______________________ Visualiza el directorio actual.
+history ____________________ Muestra el listado de comandos usados por el usuario.
+fc -l _______________________ Muestra el listado de los últimos comandos ejecutados.
+cd nombredirectorio _______ Cambia de directorio .
+cd .. ______________________ Vuelves al anterior.
+cd .kde ____________________ Entras al de kde.
+cd ./.kde __________________ Entras al de kde (indicando la ruta relativa).
+cd /home/usuario/.kde ________________ Entras al de kde (indicando la ruta completa).
+cp -dpR ficherox ruta_ficheroc _________ Realiza una copia del ficherox a ruta_ficheroc,cambiándole el nombre.
+cp -dpR ficherox /directorio ___________ Copia ficherox a directorio, conservando fichero1 el nombre.
+cp -Rpv 
+
+autojump par aque se quede con las ruras que mas usas y puedas moverte entre ellas
+
+j dir
+j--stat
+mkdir nom_directorio __________________ Crea un directorio.
+rmdir nom_directorio __________________ Elimina un directorio(tiene que estar vacío).
+rm archivo ____________________________ Elimina archivos .
+rm -r directorio _______________________ Borra los ficheros de un directorio.
+rm *.jpg ______________________________ Borra todos los ficheros .jpg del directorio actual.
+chown [-R] usuario:fichero _____________ Cambia el propietario de un fichero o directorio.
+chown -R python /home/python/proyecto
+chgrp [-R] grupo fichero _______________ Cambia el grupo de un fichero o directorio.
+chmod [-R][ugo][+/- rwxs] fichero _______ Cambia los permisos de acceso de un fichero
+Explicación:
++: da permisos
+-: quita permisos
+R: recursivo
+u: propietario
+g: grupo
+o: otros
+r: lectura
+w: escritura
+x: ejecución
+a: es la opción por defecto.
+a: todos
+Ejemplo:
+chmod +x fichero ,es lo mismo que: chmod a+x fichero
+
+chattr +i file Inmutable
+
+chattr -i file Dejarlo mutable 
+
+touch dir1/file{1..100}
+touch -a modifies only the access time
+touch -m modifies only the modification time
+
+diff -Naur directory1 directory2
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- GREP ----------
+
+grep -v hola archivo.txt --> Lineas que no contengan hola.
+grep -i xorg install.log --> Buscar la palabra xorg en el fichero install.log. La -i no diferencia entre mayus y minus.
+grep 'Jan 25 16:31*' /var/log/messages
+
+Syntax: grep [options] pattern [files]
+# grep John /etc/passwd --> Muestra los que contengan John en el fichero x.
+# grep -v John /etc/passwd --> Muestra los que no contengan John en el fichero x.
+# grep -c John /etc/passwd --> Cuenta el numero de lineas que contengan John en el fichero x.
+# grep -cv John /etc/passwd --> Cuenta el numero de lineas que no contengan John en el fichero x.
+# grep -ri john /home/users --> Busca en que ficheros aparece la palabra john en los ficheros del directorio x.
+$ grep "^Nov 10" messages.1 --> Lineas que comienzan por Nov 10
+# grep "terminating.$" messages --> Lineas que terminan con terminating.
+# grep -c "^$" messages anaconda.log --> Busca las lineas en blanco en los ficheros x.
+# grep ".ello" input --> Busca las lineas en el fichero x que tengan palabras tipo xello.
+
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- SORT ----------
+
+# sort names.txt --> Ordena las filas ascendentemente.
+# sort -r names.txt --> Ordena las filas descendentemente.
+# sort -t: -k 2 names.txt --> Ordena ascendentemente por el 2 campo. (-t:)
+# sort namesd.txt | uniq –c --> Muestra de un texto el numero de veces que aparece cada linea.
+# sort namesd.txt | uniq –cd --> Muestra de un texto el numero de veces que aparece cada linea, solo los duplicados.
+
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- CUT ----------
+
+# cut -d: -f 1 names.txt --> Display the 1st field (employee name) from a colon delimited file.
+# cut -d: -f 1,3 names.txt --> Display 1st and 3rd field from a colon delimited file.
+# cut -c 1-8 names.txt --> Display only the first 8 characters of every line in a file.
+# o tambien  cut -c 1,2,3
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- STAT ----------
+
+# stat /etc/my.cnf --> Display statistics of a file or directory.
+# stat -f / --> Display the status of the filesystem using option –f
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- SED ----------
+
+# sed 's/Linux/Linux-Unix/' thegeekstuff.txt --> Substitute Word “Linux” to “Linux-Unix” Using sed s//
+# sed -e 's/#.*//' thegeekstuff.txt --> Eliminate Comments Using sed
+#find ./ -type f -exec sed -i -e 's/apple/orange/g' {} \;
+con backup
+#find /path/to/directory -type f -exec sed -i.bak 's/oldword/newword/g' {} \;
+#find /path/to/directory -type f -name "*.bak" -exec rm -f {} \; #borramos backup
+# sed -i ##igusl que --in-place
+sed '1d' Elimina la primera linea
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- AWK ----------
+
+# awk '/Thomas/ > /Nisha/' employee.txt --> Print the lines which matches with the pattern.
+# awk '{print $2,$5;}' employee.txt --> Print only specific field
+# awk '$1 >200' employee.txt --> Find the employees who has employee id greater than 200
+# awk '$4 ~/Technology/' employee.txt --> Print the list of employees in Technology department
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- PS ----------
+
+# ps aux | more --> display all the processes running in the system
+# ps U oracle --> View Processes Owned by a Particular User
+# ps -fu "root" --> ver procesos usuario root.
+# ps -ef | grep ssh --> Sesiones abiertas ssh
+# ps -ef | grep find --> procesos con nombre find.
+# ps -ef | grep /usr/.. --> procesos que se estan ejecutando en la ruta.
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+man ls 
+
+Dicho esto, aqui os dejo la lista de comandos más indispensables para Linux: 
+
+* ls 
+
+list: listar. Es el primer comando que todo linuxero debe aprender. Nos muestra el contenido de la carpeta que le indiquemos después. Por ejemplo. Si queremos que nos muestre lo que contiene /etc: 
+
+$ ls /etc 
+
+Si no ponemos nada interpretará que lo que queremos ver es el contenido de la carpeta donde estamos actualmente: 
+
+$ ls 
+
+Además acepta ciertos argumentos que pueden ser interesantes. Para mostrar todos los archivos y carpetas, incluyendo los ocultos: 
+
+$ ls -a 
+
+Para mostrar los archivos y carpetas junto con los derechos que tiene, lo que ocupa, etc: 
+
+$ ls -l 
+
+Además se pueden solapar los argumentos. Si quisiéramos mostrar los archivos de la misma forma que antes, pero que muestre también los ocultos: 
+
+$ ls -la 
+* cd 
+
+change directory: cambiar directorio. Podemos usarlo con rutas absolutas o relativas. En las absolutas le indicamos toda la ruta desde la raíz (/). Por ejemplo, estemos donde estemos, si escribimos en consola… 
+
+$ cd /etc/apt 
+
+…nos llevará a esa carpeta directamente. Del mismo modo si escribimos… 
+
+$ cd / 
+
+…nos mandará a la raíz del sistema de ficheros. 
+
+Las rutas relativas son relativas a algo, y ese algo es la carpeta donde estemos actualmente. Imaginad que estamos en /home y queremos ir a una carpeta que se llama temporal dentro de vuestra carpeta personal. Con escribir… 
+
+$ cd tu_carpeta/temporal 
+
+…nos situará allí. Como véis hemos obviado el /home inicial ya que si no lo introducimos toma como referencia el directorio donde estamos, que es ese. 
+
+¿Y qué sucede si escribimos tan sólo… 
+
+$ cd 
+
+Sí, sólo “cd”. Esto lo que hace es que te lleva a tu carpeta personal directamente y estemos donde estemos. Es algo realmente muy práctico, muy simple y que no todos conocen. 
+* mkdir 
+
+make directory: hacer directorio. Crea una carpeta con el nombre que le indiquemos. Nuevamente podemos usar rutas absolutas y relativas. Podemos indicarle toda la ruta que le precede al directorio que queremos crear, o si estamos ya en la carpeta que lo va a contener basta con poner tan sólo el nombre: 
+
+$ mkdir /home/tu_cuenta/pepino 
+
+Si ya estamos en /home/tu_cuenta… 
+
+$ mkdir pepino 
+* rm 
+
+remove: borrar. Borra el archivo o la carpeta que le indiquemos. Como antes se puede indicar la ruta completa o el nombre del archivo. Esto a partir de ahora lo vamos a obviar, creo que ya ha quedado claro con los dos comandos anteriores. 
+
+Para borrar un archivo: 
+
+$ rm nombre_archivo 
+
+Para borrar una carpeta vacía: 
+
+rm nombre_carpeta 
+
+Para borrar una carpeta que contiene archivos y/o otras carpetas que pueden incluso contener más: 
+
+rm -r nombre_carpeta 
+
+Otras opciones: “-f” no te pide una confirmación para eliminar o “-v” va mostrando lo que va borrando. 
+* cp 
+
+copy: copiar. Copia el archivo indicado donde le digamos. Aquí podemos también jugar con las rutas, tanto para el fichero origen, como en el del destino. También podéis poner el nombre que le queréis poner a la copia. Por ejemplo, si estuviéramos en /etc/X11 y quisiéramos hacer una copia de seguridad de xorg.conf en nuestra carpeta personal: 
+
+$ cp xorg.conf /home/tu_carpeta/xorg.conf.backup 
+mv 
+
+move: mover. Es igual que el anterior, sólo que en lugar de hacer una copia, mueve directamente el archivo con el nombre que le indiquemos, puede ser otro distinto al original: 
+
+$ mv /etc/pepino.html /home/tu_carpeta/ese_pepino.html 
+
+Otro uso muy práctico que se le puede dar es para renombrar un archivo. Basta con indicar el nuevo nombre en el segundo argumento con la misma ruta del primero. En este ejemplo suponemos que ya estamos en la carpeta que lo contiene: 
+
+$ mv pepino.html ese_pepino.html 
+* find 
+
+find: encontrar. Busca el archivo o carpeta que le indiques: 
+
+$ find / -name pepino 
+
+El comando anterior buscaría en todos los sitios las carpetas y archivos que se llamen pepino. Si tuviéramos la seguridad de que se encuentra en /var por ejemplo, se lo indicaríamos: 
+
+$ find /var -name pepino 
+
+Si no estamos muy seguros del nombre podemos indicárselo con comodines. Supongamos que el nombre de lo que buscamos contiene “pepi”, en la misma carpeta de antes: 
+
+$ find /var -name *pepi* 
+
+Tiene otras opciones. Por ejemplo podemos decirle que encuentre los archivos/carpetas de más de 1500 KB: 
+
+$ find / -size +1500 
+
+O los archivos/carpetas contienen el nombre “pepi” y tienen menos de 1000 KB: 
+
+$ find / -name *pepi* -size -1000 
+
+find / -iname ´*.conf´ 
+#case insensitive y solo en la carpeta que le marque ( para eevitar una busqueda de muchas ocurrencias por patron)
+
+
+find . -type f -not -path "./dir1/*" -not -path "./dir4/*" -exec cp '{}' /tmp \;
+#Excluyendo carpetas o con la opcion prune no mostrariala carpeta pero si un fichero con ese nombre
+
+find . -path ./dir4 -prune -o -print 
+
+* clear 
+
+clear: despejar. Limpia la pantalla/consola quedándola como si acabáramos de abrirla. 
+
+$ clear 
+* ps 
+
+process status: estado de los procesos. Nos muestra lo que queramos saber de los procesos que están corriendo en nuestro sistema. Cada proceso está identificado con un número llamado PID. Si hacemos… 
+
+$ ps -A 
+
+…nos mostrará un listado de todos los procesos, su PID a la izquierda y su nombre a la derecha. Si queremos más información: 
+
+$ ps aux 
+* kill 
+
+kill: matar. Elimina el proceso que le indiquemos con su PID: 
+
+$ kill 
+
+En ocasiones el proceso no “muere” del todo, pero se le puede forzar al sistema para que lo mate con seguridad del siguiente modo: 
+
+$ kill -9 
+* sudo 
+
+super-user do: hacer como superusuario. La cuenta de usuario en Ubuntu es relativamente normal. Tiene derechos de administrador a medias. Me explico, los tiene, pero cada vez que se haga algo importante y de riesgo para el sistema, hay que hacerlo mediante el prefijo “sudo” y escribiendo después la contraseña. 
+
+sudo -s no pediria mas que una vez la pass y nos deja seguir como su . NO recomendado
+
+Por ejemplo, algo que hemos hecho muchas veces en los tutoriales es hacer una copia de seguridad del fichero xorg.conf. Éste está localizado en la carpeta /etc/X11 y ahí ningún usuario puede hacer modificaciones o borrar nada si no es el administrador o tiene derechos como tal, gracias a sudo. Por eso hacíamos siempre: 
+
+$ sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf 
+
+Siempre que necesitemos hacer un apt-get/aptitude update o install y acciones de este tipo, tendremos que poner antes el “sudo”. 
+* passwd 
+
+password: contraseña. Con este comando podremos cambiar la contraseña de nuestra cuenta. Primero nos pedirá la contraseña actual como medida de seguridad. Después nos pedirá que introduzcamos dos veces seguidas la nueva contraseña. 
+
+$ passwd 
+* su 
+
+super-user: superusuario. Mediante su podremos loguearnos como superusuario. Tras escribirlo nos pedirá la contraseña de root y estaremos como administrador. Podremos hacer todo lo que queramos. 
+
+$ su 
+
+Este comando también nos permite hacer login con otra cuenta distinta. Por ejemplo, imaginemos que tenemos otra cuenta, además de root y la nuestra, llamada “invitado”. Para hacer login como tal bastaría con poner: 
+
+$ su invitado 
+
+y después escribir la contraseña de esa cuenta. 
+* sudo passwd 
+
+No es un comando propiamente dicho, pero es interesante que lo conozcáis. Gracias a la unión de estos dos comandos podréis cambiar la contraseña de root (la del super-usuario). 
+
+$ sudo passwd 
+* apt 
+
+advanced packets tool: herramienta avanzada de paquetes. Es uno de los comandos más útiles que se han desarrollado en los sistemas GNU/Linux debian o basados en esta distro. Nos permite comprobar actualizaciones, actualizar todo el sistema. También nos ofrece funcionalidad para buscar, descargar e instalar paquetes con una sola orden. 
+
+Tenemos variantes, las más usadas son las siguientes: 
+
+$ apt-cache search nombre_paquete 
+
+Busca nombre_paquete para ver si existe literal o aproximadamente ofreciéndonos los paquetes que pudieran ser en caso de que hayamos puesto un nombre aproximado. 
+
+$ apt-get update 
+
+Actualiza los repositorios que son los que contienen los paquetes. Los repositorios son como las direcciones que contienen nuestros paquetes. apt-get update lo que hace es actualizar el listado de todos esos paquetes, con la dirección de dónde obtenerlos para que a la hora de hacer la búsqueda y su posterior descarga sea más rápida haciéndolo en nuestro ordenador. 
+
+$ apt-get upgrade 
+
+Actualiza nuestro sistema con todas las posibles actualizaciones que pudiera haber. La actualización no se realiza sólo sobre el propio sistema operativo, sino también sobre las aplicaciones que estén contenidas en los repositorios. Una útil forma de estar siempre al día. 
+
+$ apt-get install nombre_paquete 
+
+Localizado el nombre del paquete que queremos descargar e instalar, este comando se encargará del proceso. Buscará en nuestro índice (el que se crea con update) de dónde tiene que descargarse el paquete, lo hace y posteriormente lo instala. 
+
+$ apt-get remove [--purge] nombre_paquete 
+
+Elimina el paquete especificado del sistema. Damite el argumento “–purge” (corchetes = opcional) para que borre también los ficheros de configuración. 
+
+$ apt-get autoremove 
+
+Elimina paquetes que han quedado inservibles tras realizar algún apt-get remove, los llamados huérfanos. Normalmente tras hacer este último te avisa en un mensaje que lo realices. 
+
+Todos estos comandos necesitan tener privilegios de administración, así que si no los usáis como root, debéis agregar primero el conocido “sudo”. 
+* aptitude 
+
+aptitude: aptitud, habilidad. En el fondo juega con las siglas de apt para crear aptitude. Es una versión mejorada de apt. Si os habéis fijado en todos los manuales y entradas donde había un proceso de instalación he usado aptitude en lugar de apt. El segundo es quizá el más extendido al ser el que vio la luz primero. 
+
+aptitude nació como un front-end de apt, es decir, como una especie de aplicación gráfica y en modo texto para realizar todo lo que hace apt. Pero lo cierto es que sus características son mejores. 
+
+apt cuando instala algo te puede realizar una sugerencia para que instales algo más que te podría venir bien, pero no lo hace. Hay programas que a la vez usan otros para algunas de sus funciones u opciones. apt no instalaría los segundos, como mucho te avisaría. Sin embargo aptitude sí que lo instalará porque sabe que de alguna forma es indispensable para el que has pedido. 
+
+De la misma forma, si con apt instalas luego ese programa que es usado por otro, cuando desinstalas el principal, no se desinstalará el secundario, aunque éste ya no tenga mucho sentido que esté instalado, y lo mismo sucede con librerías. aptitude está capacitado para desinstalar lo que él mismo ha instalado como recomendación. Te deja el sistema más limpio tras las desinstalaciones. 
+
+Para abrir el interfaz gráfico de aptitude, tan sólo hay que teclearlo: 
+
+$ aptitude 
+
+Sin embargo, también se puede usar exactamente igual que apt, pero con las características que he comentado de aptitude: 
+
+$ aptitude search nombre_paquete 
+$ aptitude install nombre_paquete 
+$ aptitude remove nombre_paquete 
+$ aptitude purge nombre_paquete 
+$ aptitude update 
+$ aptitude upgrade 
+
+Y al igual que antes, necesitaréis usarlo con el sudo delante si no estáis como administrador. 
+* dpkg 
+
+depackage: despaquetar. Los paquetes cuando se instalan sufren un proceso de despaquetaje. En el fondo un paquete .deb contiene una serie de scripts de pre-instalación, post-instalación y los archivos en cuestión del paquete. 
+
+Este comando lo usaremos para instalar un paquete .deb que ya tengamos descargados en nuestro sistema. En muchas ocasiones hay una aplicación que no está en los repositorios y nos hemos bajado el .deb para instalarlo con el interfaz gráfico que corresponda (GDebi en el caso de GNOME). 
+
+En el fondo estas interfaces gráficas están basadas en dpkg. Si queremos instalar un paquete ya descargado mediante consola usaremos el argumento ‘-i’ (i=install): 
+
+$ dpkg -i nombre_paquete 
+
+Para desinstalarlo ‘-r’ (r=remove): 
+
+$ dpkg -r nombre_paquete 
+
+Para desinstalar el paquete y los ficheros de configuración “–purge” (purgar): 
+
+$ dpkg -r –purge nombre_paquete 
+* alien 
+
+A petición de lector. 
+
+Alien: de otro país, de otro planeta. Aunque Debian -y por extensión Ubuntu- dispone de una ingente cantidad de paquetes en sus repositorios, puede que alguien tenga algún problema en encontrar una aplicación específica empaquetada como le interesa aunque ha visto el paquete que quiere para otras distros. 
+
+alien es bastante práctico para estas situaciones ya que nos permite transformar un paquete de un gestor de paquetes determinado en otro. Por ejemplo podemos pasar de un .deb (Debian) a un .rpm (Red Hat) y viceversa. Las extensiones soportadas son: 
+
+* deb (Debian) 
+* rpm (Red Hat) 
+* slm (Stampede) 
+* tgz (Slackware) 
+* pkg (Solaris) 
+
+Su uso es sencillo. Lo que debemos saber es el argumento que transformará el paquete original en la extensión objetivo: 
+
+* “–to-deb” o “-d” para transformar a .deb 
+* “–to-rpm” o “-r” para transformar a .rpm 
+* “–to-tgz” o “-t” para transformar a .tgz 
+* “–to-pkg” o “-p” para transformar a .pkg 
+* “–to-slp” para transformar a .slp 
+
+Como ejemplo, pasaremos un supuesto paquete de Red Hat llamado “pepino.rpm” a “pepino.deb”: 
+$ alien -d pepino.rpm 
+* man 
+
+manual: manual. Es otro de los comandos de gran potencia en linux. Normalmente queda programa o comando viene con un archivo de ayuda muy completo sobre su uso y sus argumentos. Cuando desconozcáis cómo se usa y qué argumentos tiene un comando o aplicación tan sólo tenéis que escribir en consola: 
+
+$ man nombre 
+
+En ocasiones la información que nos ofrece man puede llegar a ser excesiva. Casi todos los comandos y aplicaicones aceptan el argumento “–help” para que muestre cierta ayuda más resumida. Por ejemplo con aptitude: 
+
+$ aptitude –help 
+
+Todos los comandos que os he mostrado tienen muchos más argumentos. Os he puesto los más usados o necesarios, así que si hay alguno que os interesa particularmente conocer más de él, tenéis “man” o “–help” para obtener más detalles. 
+
+ACTUALIZACIÓN: Carlos, nos dejo unos comentarios que creo pueden completar el manual anterior. 
+
+Déjame comentar algunas cosas que les pueden ser de interés: 
+
+Sobre cd: 
+
+$ cd - 
+Nos devuelve al último directorio en el que estuviéramos. Lo descubrí por accidente. 
+Es muy práctico cuando queremos editar ficheros en dos lugares. 
+$ cd /etc/X11/ 
+$ cd /backup/ 
+$ cd - 
+Nos lleva a /etc/X11 
+$ cd - 
+nos devuelve a /backup 
+
+Sobre cp: 
+Para copiar un directorio se usa cp -r 
+$ cp -r /etc /backup/ 
+Tendremos /backup/etc, y dentro de ese directorio tendremos lo mismo que hay en /etc 
+Muy útil. 
+
+Sobre mv: 
+Tambien permite mover directorios o renombrarlos 
+$ mv /home/yo/misdocumentos /home/yo/mis_documentos 
+
+Sobre kill: 
+apenas lo uso, en su lugar utilizo killall, que permite matar por nombre de proceso, y los procesos llamarse siempre igual (no así sus pid), permite no tener que hacer un ps para saber qué tienes que poner. 
+$ killall firefox-bin 
+Eso sí, no es útil si tienes varios procesos abiertos con el mismo nombre, puesto que los cerrará todos. 
+También acepta entre killall y el nombre del proceso un -X, donde X es la señal que quieras (9 para matarlo, 15 para que intente cerrar él solo) 
+$ killall -15 firefox-bin (vaya, no va) 
+$ killall -9 firefox-bin 
+
+y de2rapi2 añade el siguiente comando al manual: 
+
+alias: permite crear atajos para comandos 
+ej,: 
+
+$ alias ll=”ls -l” 
+$ alias instala=”sudo aptitude install”
+
+
+
+
+Ver progremas instalados DEBIAN
+
+En un sistema Linux (especialmente si lo estamos usando para pruebas) es fácil perder la pista de los paquetes/programas instalados. Desde un terminal, podemos ejecutar el siguiente comando:
+
+#dpkg –get-selections | grep -v deinstall
+
+Si tenemos instalado el paquete aptitude, podremos ejecutar el siguiente comando, que nos da una pequeña descripción de cada programa que tengas instalado:
+
+#aptitude search ‘~i!~M’
+
+
+Modos
+
+cambiar modo grafico
+
+systemctl enable graphical.target --force
+systemctl get-default
+systemctl set-default multi-user.target
+systemctl set-default graphical.target
+
+
+
+
+XRDP
+
+
+root@ubuntu:~# aptitude install tightvncserver
+
+root@ubuntu:~# aptitude install xrdp
+
+root@ubuntu:~# reboot
+
+
+vaciar cache
+
+echo 3 >> /proc/sys/vm/drop_caches
+
+
+# Conf teclado
+
+
+
+localectl list-keymaps
+localectl status
+localectl set-keymap
+
+
+#Teclado español es keyboard
+
+localectl set-keymap es
+
+#confiGURACION RED
+
+nmcli
+nmcli con show
+
+nmtui ( ex setup)  
+
+
+Configure name resolution 	/etc/hosts
+/etc/resolv.conf 	/etc/hosts
+
+RH 7 nmcli con mod 
+
+/etc/sysconfig/network-scripts
+
+
+
+
+
+
+
+
+
+
+#Systemctl 
+
+systemctl enableservice_name
+
+systemctl disableservice_name
+
+
+systemctl status firewalld
+
+systemctl start firewalld
+systemctl enable firewalld
+
+firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='112.85.42.237' reject"
+firewall-cmd --reload
+
+firewall-cmd --permanent --zone=public --add-source=192.168.113.223/24
+firewall-cmd --reload
+
+
+firewall-cmd --add-port=9090/tcp
+firewall-cmd --permanent --add-port=9090/tcp
+
+firewall-cmd --list-ports
+
+
+SELINUX
+
+Display the current SELinux mode in effect:
+getenforce 
+
+setenforce Enforcing
+setenforce Permissive
+
+
+To permanently set the SELinux mode, modify the SELINUX variable in the
+/etc/selinux/config configuration file.
+For example, to switch SELinux to enforcing mode:
+# This file controls the state of SELinux on the system.
+# SELINUX= can take one of these three values:
+# enforcing - SELinux security policy is enforced.
+# permissive - SELinux prints warnings instead of enforcing.
+# disabled - No SELinux policy is loaded.
+SELINUX=enforcing
+
+
+
+#KDUMP
+
+
+rpm -q kexec-tools
+
+yum install system-config-kdump
+
+
+#BACKUP  rear resocevry disk
+
+yum install rear genisoimage syslinux
+
+cat /etc/rear/local.conf
+
+rear mkrescue
+
+
+
+
+LOGS#
+
+
+1.10.1. Services Handling the syslog Messages
+The syslog messages are handled by two services:
+the systemd-journald daemon - Collects messages from the kernel, the early stages of the
+boot process, standard output and error of daemons as they start up and run, and syslog, and
+forwards the messages to the rsyslog service for further processing.
+the rsyslog service - Sorts the syslog messages by type and priority, and writes them to the
+files in the /var/log directory, where the logs are persistently stored.
+1.10.2. Subdirectories Storing the syslog Messages
+The syslog messages are stored in various subdirectories under the /var/log directory according to
+what kind of messages and logs they contain:
+var/log/messages - all syslog messages except those mentioned below
+var/log/secure - security and authentication-related messages and errors
+var/log/maillog - mail server-related messages and errors
+var/log/cron - log files related to periodically executed tasks
+var/log/boot.log - log files related to system startup
+
+##Syslogs
+
+In order to log to the syslog file /var/log/messages use:
+$ logger LOG_MESSAGE
+$ logger This is a test log line
+$ tail -n 1 /var/log/messages
+Sep 29 07:47:44 slynux-laptop slynux: This is a test log line
+$ logger -t TAG This is a message
+$ tail -n 1 /var/log/messages
+Sep 29 07:48:42 slynux-laptop TAG: This is a message
+
+
+jorurnalctl
+
+usermod -a -G adm username
+
+Añadir usuario para ver logs queno sean generados por el
+
+
+systemctl restart systemd-journald
+
+systemctl list-units --all
+
+
+Redirigir X11
+
+add X11Forwarding yes /etc/ssh/sshd_config
+
+service sshd restart
+
+instalar XMinf y fuentes en windows
+Permitor redirigir X11 en putty
+
+#operador grave
+
+
+for a in `ls` ; do ls -lia  $a ;done
+
+
+for file in /usr/local/nagios/libexec ; do ls -lia ; done
+
+
+iptables
+
+iptables -L -n
+
+iptables -I INPUT -p tcp -s 172.16.2.115 --dport 22 -j ACCEPT
+iptables -A INPUT -s 192.168.10.194/24 -j ACCEPT
+iptables -I INPUT -p tcp -s 0.0.0.0/0 --dport 22 -j DROP
+iptables -I INPUT -p udp -s 0.0.0.0/0 --dport 53 -j DROP
+
+
+servicios
+
+systemctl list-unit-files | grep enabled
+
+Ubuntu
+
+
+If you run the following command you will get a list of services:
+
+sudo service --status-all
+
+
+
+
+REAR
+
+yum install rear genisoimage syslinux
+
+
+RSYNC
+
+file
+
+rsync -avz /var/www/public_html/.htaccess root@<remote-ip>:/var/www/public_html/
+
+nohup rsync -azvr /data/scratch/testhpc/ /mnt/usb/HPC/backup/scratch/testhpc/ >testhpc.txt &
+
+
+nohup rsync -azvr /data/scratch/agata/ /mnt/usb/HPC/backup/scratch/agata/ >agata.txt &
+nohup rsync -azvr /data/scratch/ICFO/ /mnt/usb/HPC/backup/scratch/ICFO/ >icfo.txt &
+nohup rsync -azvr /data/scratch/Unim/ /mnt/usb/HPC/backup/scratch/Unim/ >unim.txt &
+nohup rsync -azvr /data/scratch/UBCN/ /mnt/usb/HPC/backup/scratch/UBCN/ >ubcn.txt &
+
+
+
+
+rsync -aAXv --delete-after --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} / user@server:backup-folder
+
+disable ip v6
+
+
+Append below lines in /etc/sysctl.conf:
+
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+
+NOTE : To disable IPv6 on a single interface add below lines to /etc/sysctl.conf :
+net.ipv6.conf.[interface].disable_ipv6 = 1 ### put interface name here [interface]
+net.ipv6.conf.default.disable_ipv6 = 1
+
+
+# sysctl -p
+
+reparar bd rpm 
+
+rpm --rebuild
+
+BACKUP
+
+/sbin/dump -0uan -f - / | gzip -2 | ssh -c blowfish user@backupserver.example.com dd of=/backup/server-full-backup-`date '+%d-%B-%Y'`.dump.gz
+restore -i
+
+tar -zcvpf /backup/full-backup-`date '+%d-%B-%Y'`.tar.gz --directory / --exclude=mnt --exclude=proc --exclude=tmp 
+tar -zxf nombre.tar -C nombre carpeta a descomrpimir
+
+
+
+permisos
+
+getfacl -R . > permissions_backup
+
+setfacl --restore=permissions_backup 
+
+
+
+
+
+getent hosts x.x.x.x
+host xxxxx
+#resolucion del fichero hosts 
+
+
+#Añadir path
+
+script en /etc/profile.d
+
+export PATH=/home/python/anaconda3/bin:$PATH
+
+#actualizar perfil
+source  source /etc/profile
+
+#sole horas,min y se$cs
+echo $(date) | awk '{ print $4}'
+
+
+#lista solo carpetas
+
+ls -d */
+
+
+#hexadecimal u octal
+
+echo $((0xdeadbeef)) # Outputs 3735928559
+echo $((0127)) # Outputs 87
+# floating point calculations
+echo ‘scale=12; 2.5*2.5’ | bc # Outputs 6.25
+echo ‘scale=12; sqrt(14)’ | bc # Outputs 3.741657386773
+
+
+#descarga estructura web 
+wget -r --spider www.your-website.com
+wget -r --spider -l depth www.your-website.com
+In order to download the pages, use the --mirror option as follows:
+$ wget --mirror exampledomain.com
+Or use:
+$ wget -r -N -l DEPTH URL
+wget –-user username –-password pass URL
+Let's download the webpage view, in ASCII character representation, in a text file using the
+–dump flag with the lynx command:
+$ lynx -dump URL > webpage_as_text.txt
+
+wget -m -p -E -k www.example.com
+
+-m, --mirror            Turns on recursion and time-stamping, sets infinite 
+                          recursion depth, and keeps FTP directory listings.
+-p, --page-requisites   Get all images, etc. needed to display HTML page.
+-E, --adjust-extension  Save HTML/CSS files with .html/.css extensions.
+-k, --convert-links     Make links in downloaded HTML point to local files.
+-np, --no-parent        Don't ascend to the parent directory when retrieving 
+                        recursively. This guarantees that only the files below 
+                        a certain hierarchy will be downloaded. Requires a slash 
+                        at the end of the directory, e.g. example.com/foo/.
+
+##Post data
+curl –-data "name=value" URL -o output.html
+wget URL –post-data "name=value" -O output.html
+
+
+
+#Shared folders vmware con open-vm-tools
+
+Crear carpeta /mnt/hgfs
+
+mount -t fuse.vmhgfs-fuse .host:/ /mnt/hgfs
+
+
+nohup /home/edheal/myprog -arg1 -arg2 > /home/edheal/output.txt 2>&1 &
+
+
+#selinux
+
+sestatus
+
+temporal
+
+setenforce Permissive
+
+
+
+setenfoce 0 # no es fijo
+
+permanente
+
+
+vi /etc/sysconfig/selinux
+
+
+SELinux=enforcing to SELinux=disabled 
+
+
+
+setfacl -d -m group:name:rwx /path/to/your/dir
+
+ldd your_prog | awk '{print $1}' | sed 's/\..*//' | 
+  while read n; do echo "----- $n ----"; apt-cache search ^$n; done
+
+
+ntpdate europe.pool.ntp.org
+
+After editing /etc/fstab, regenerate mount units so that your system registers the new configuration
+systemctl daemon-reload
+
+cambiar usuario a grupo
+
+usermod -a -G examplegroup exampleusername
+
+Eliminar a usuario de grupo 
+gpasswd -d user group
+
+
+#instalar entorno grafico fedora
+
+dnf -y group install "Xfce Desktop" 
+echo "exec /usr/bin/xfce4-session" >> ~/.xinitrc 
+
+
+#Encontrar todos los enlaces simbolicos
+
+find / -type l
+
+find -L /dir/to/start -xtype l -samefile ~/Pictures 2>/dev/null
+
+#Color vim
+:color desert
+
+
+#Journal
+
+journalctl -xe
+journalctl -f
+journalctl --unit nombreservicio
+journalctl --unit nombreservicio --since  "2016-10-30 18:17:16"
+
+
+#HBA Fibra 
+lspci -v 
+
+lspci -nn | grep -i Fibre
+
+#serial, part-number...
+lspci -vv -s 05:00.0
+
+multipath -ll
+#rescan
+
+echo "1" > /sys/class/fc_host/host3/issue_lip
+
+ls -l /sys/class/fc_host
+ls -lrt /sys/class/fc_transport/
+
+cat /sys/class/fc_host/host?/port_name
+
+Añadir
+
+echo "c t l" > /sys/class/scsi_host/hosth/scan
+Rescan
+echo "1" > /sys/class/fc_host/host/issue_lip
+
+
+vendor & ids
+
+cat /usr/share/hwdata/pci.ids  | grep Emulex
+drivers y mas info 
+systool -a -v -c scsi_host | egrep "Class Device|model|version|proc_name|info|fwrev"
+
+link
+
+ 
+more /sys/class/fc_host/host11/port_state      
+Linkdown
+more /sys/class/fc_host/host12/port_state
+Online
+
+#MEllanox
+
+
+lspci | grep MEllanox
+
+05:00.0 Infiniband controller: Mellanox Technologies MT27700 Family [ConnectX-4]
+        Subsystem: Mellanox Technologies ConnectX-4 VPI IB EDR/100 GbE Single Port QSFP28 Adapter
+
+
+lspci -vv -s 05:00.0 | grep "part number" 
+
+#Connect -X4
+
+ lspci | grep Mellanox | awk '{print $1}' | xargs -i -r mstvpd {}
+
+ln -s redhat-release centos-release
+
+##Printf
+
+formatea salida
+
+printf "%-5s %-10s %-4s\n" No Name Mark
+printf "%-5s %-10s %-4.2f\n" 1 Sarath 80.3456
+printf "%-5s %-10s %-4.2f\n" 2 James 90.9989
+printf "%-5s %-10s %-4.2f\n" 3 Jeff 77.564
+
+The above mentioned command returns a list of environment variables and their values.
+Each variable is represented as a name=value pair and are separated by a null character
+(\0). If you can substitute the \0 character with \n, you can reformat the output to show
+each variable=value pair in each line. Substitution can be made using the tr command
+as follows:
+$ cat /proc/12501/environ | tr '\0' '\n'
+
+###banner
+
+figlet 
+figlet es.wikipedia.org
+figlet -ct -f roman Wikipedia
+
+f para seleccionar una tipografía.
+-d para seleccionar el directorio de las tipografías.
+-c centra el texto de salida.
+-l alinea el texto a la izquierda.
+-r alinea el texto a la derecha.
+-w especifica un tamaño de salida.
+-k habilita el kerning, creando cada letra de forma separada en vez de fundirse con las adyacentes.
+
+#reconfigurar opciones  modo grafico primer arranque
+firstboot --enable --reconfig
+
+#Reload. cargar configuraciones sin reinicio
+
+systemctl daemon-reload 
+#soft reload. taking changed configurations from filesystem and regenerating dependencies
+sysctl --system
+#reload from config files without rebooting
+
+1.	/run/sysctl.d/*.conf 
+2.	/etc/sysctl.d/*.conf 
+3.	/usr/local/lib/sysctl.d/*.conf 
+4.	/usr/lib/sysctl.d/*.conf 
+5.	/lib/sysctl.d/*.conf 
+6.	/etc/sysctl.conf
+
+
+#Persistent configuration
+vi /etc/sysctl.conf
+sysctl -p 
+
+## Sudoers
+
+## Allows people in group wheel to run all commands
+%wheel  ALL=(ALL)       ALL
+
+## Allows people in group consulta (Usuario Punto de entrada Unico)  to run all commands
+consulta ALL=   NOPASSWD: /usr/bin/scancel, /usr/bin/scontrol
+
+#Taskset
+
+taskset -p pid #Devuelve afinidfad por procesaores en hexa
+taskset -cp pid ]0--al que sea]
+pid 2915's current affinity list: 0-7
+Se pueden definir afinidades
+
+Obligar a un proceso a que se ejecute en un núcleo específico
+
+Utilizando taskset, se puede asignar un proceso en ejecución a un núcleo específico de la CPU. Para ello, hay que utilizar el siguiente formato:
+
+taskset -p COREMASK PID
+taskset -cp CORE-LIST PID
+
+Por ejemplo, para asignar un proceso a los núcleos 0 y 4, hay que ejecutar:
+
+taskset -p 0x11 9030
+
+Lo que devuelve el resultado:
+
+pid 9030's current affinity mask: ff
+pid 9030's new affinity mask: 11
+
+En forma equivalente, se puede ejecutar:
+
+taskset -cp 0,4 9030
+
+taskset COREMASK EJECUTABLE
+
