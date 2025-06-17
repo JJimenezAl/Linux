@@ -1,0 +1,5 @@
+0i0DATE=`date +%m.%d.%Y`
+rsync -razv dev@xx.xx.xx.xx:repos /home/backup_sys_user/repos_backup/$DATE
+
+
+0 8 * * * sh /home/python/copia.sh

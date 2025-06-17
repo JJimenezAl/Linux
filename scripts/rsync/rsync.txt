@@ -1,0 +1,10 @@
+rsync -azvh --delete /home/casa/Documents/copia/ /home/casa/backup/ --log-file=copia.txt
+
+#podemos acabar con >>/dev/null
+
+
+flag "newer" -u update flag
+rsync -rtuv /path/to/dir_a/* /path/to/dir_b
+rsync -rtuv /path/to/dir_b/* /path/to/dir_a
+
+esta opcion? https://www.cis.upenn.edu/~bcpierce/unison/index.html

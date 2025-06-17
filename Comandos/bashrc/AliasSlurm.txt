@@ -1,0 +1,9 @@
+# specific aliases and funcions
+alias sc='cd /data/scratch/user'
+alias sq='squeue -u user'
+alias sr8='salloc --job-name sr8 --mem-per-cpu=4G -n 2 --time 23:59:59'
+alias sr16='salloc --job-name sr16 --mem-per-cpu=4G -n 4 --time 23:59:59'
+alias sr32='salloc --job-name sr32 --mem-per-cpu=4G -n 8 --time 23:59:59'
+alias sr64='salloc --job-name sr64 --mem-per-cpu=4G -n 16 --time 23:59:59'
+alias sa='sacct -aX -u user --format=Jobid,Jobname,State,ReqMem,NCPUS'
+#sacct -aX -S 2021-07-20 -E 2021-07-21 -u user --format=Jobid,Jobname,State,ReqMem,NCPUS
