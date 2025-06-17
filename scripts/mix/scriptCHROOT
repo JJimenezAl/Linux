@@ -1,0 +1,5 @@
+chroot /chroot_dir /bin/bash -c "su - -c ./startup.sh"
+
+chroot chroot/ ./chroot.sh
+
+chroot $CHROOT ./mlnxofedinstall --add-kernel-support

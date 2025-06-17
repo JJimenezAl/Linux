@@ -1,0 +1,71 @@
+
+Process Accounting
+
+The package psacct contain utilities for monitoring process activities:
+
+    ac – displays statistics about how long users have been logged on.
+    lastcomm – displays information about previously executed commands.
+    accton – turns process accounting on or off.
+    sa – summarises information about previously executed commands.
+
+Install and enable the service:
+
+# yum install psacct
+# systemctl enable psacct.service
+# systemctl start psacct.service
+
+
+# ac –d --> Connect time for the current logged in user
+# ac -p --> Connect time for all the users
+3 ac -d sanjay --> ac -d sanjay
+
+# usermod -G grupo --> añade el grupo al usuario.
+# usermod -g grupo --> añade el grupo como primario al usuario.
+
+# cat /etc/passwd --> Ver Usuarios.
+# cat /etc/group --> Ver grupos.
+
+# su --> Entrar a la sesión como root u otro usuario.
+# su nombre-usuario --> Estando como root entramos como otro usuario.
+# passwd --> Cambio de contraseña.
+# who -a -H --> Muestra información de los usuarios conectados al sistema.
+# users --> Muestra información de los usuarios conectados al sistema.
+# id --> Muestra información del usuario actual,(grupos a los que pertenece,uid,gid)
+# groups --> Muestra los grupos a los que pertenece un usuario.
+# adduser usuario --> Crea un nuevo usuario.
+# adduser usuario grupo --> Añade un usuario existente a un grupo ya existente.
+# adduser –no-create-home usuario --> Crea un usuario pero sin directorio personal(home).
+# addgroup grupo --> Crea un nuevo grupo.
+# deluser usuario --> Elimina un usuario.
+# deluser usuario grupo --> Elimina un usuario del grupo especificado.
+# deluser –remove-home usuario --> Elimina un usuario y su directorio home.
+# delgroup grupo --> Elimina un grupo.
+# delgroup grupo –only-if-empty --> Elimina un grupo sólo si no tiene ningún usuario.
+# usermod -l nuevo_login --> Cambia el nombre del usuario.Sería bueno combinarlo con -d
+# usermod -d nueva_home -m login --> Cambia el home al usuario,creándolo si no existiese y transfiriendo el contenido.
+# usermod -e 2006-04-14 login --> Fecha en que la cuenta del usuario será desactivada,expresada en formato AAAA-MM-DD
+# groupmod -n nuevo_nombre grupo --> Cambia el nombre de un grupo.
+# gpasswd -a usuario grupo --> Añade un usuario dentro de un grupo.
+# usermod -m -d /home/folder user
+# useradd -M NO crea home
+# usermod --login new_username old_username
+# usermod -aG group user 
+# usermod --login new_username --move-home --home path_to_the_new_home_dir old_username
+# groupmod --new-name new_username old_username
+
+To assign a new UID to user called foo, enter:
+usermod -u 2005 foo
+Para crearlo 
+useradd -u 1500 username
+groupadd -g 3000 nuevo grupo
+To assign a new GID to group called foo, enter:
+groupmod -g 3000 foo
+groups someUser
+
+LocK USer
+sudo usermod -L katelyn
+Unlock USer
+sudo usermod -U katelyn
+
+
+

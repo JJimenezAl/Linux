@@ -1,0 +1,4 @@
+echo "scale=100000; a(1)*4" | bc -l
+
+
+Que se pondrá a calcular con un solo núcleo 100000 dígitos del número Pi.

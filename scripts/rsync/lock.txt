@@ -1,0 +1,26 @@
+LOCK="/var/run/rsync.lock"
+
+if [ ! -e $LOCK ]; then
+    touch $LOCK
+    rsync -avz foo bar
+    rm $LOCK
+else
+   echo "rsync ya se está ejecutando"
+fi
+
+
+
+con trap el script se detiene y borra lock
+
+
+LOCK="/var/run/rsync.lock"
+
+if [ ! -e $LOCK ]; then
+   trap "rm -f $LOCK; exit" INT TERM EXIT
+   touch $LOCK
+   rsync -avz foo bar
+   rm $LOCK
+   trap - INT TERM EXIT
+else
+   echo "rsync ya se está ejecutando"
+fi

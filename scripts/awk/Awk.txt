@@ -1,0 +1,27 @@
+
+filtra por valor
+awk '/2410626/' pos_cut.txt
+
+#delimitador
+
+| awk -F ":" '{print $1}'
+
+sinfo | grep intel_std* | grep idle | awk {'print $4'}
+
+#numero de lineas
+awk "{print NF}" < pos_cut.txt | uniq
+#filtrando valores
+awk '{ if ($7 == 6) { print } }' pos_cut1-5.txt | head
+awk '{ if($8 >= 11000000) { print }}' pos_cut.txt | head
+awk -F "\t" '{ if(($7 == 6) && ($8 >= 11000000)) { print } }' pos_cut.txt | tail
+awk -F "\t" '{ if(($7 == 6) && ($8 >= 11000000 && $8 <= 25000000)) { print } }' pos_cut.txt
+
+#Numero de lineas ( o filas)
+
+ps -aux | awk 'NR==1{print $0}'
+#con 0 imprime todas
+ps -aux | awk 'NR==1{print $1}'
+
+#suma
+
+sacct -p -S 2020-01-01 -u user1,user2,user3 --format=CPUTimeRAw  | awk '{sum+=$1} END {print sum} '

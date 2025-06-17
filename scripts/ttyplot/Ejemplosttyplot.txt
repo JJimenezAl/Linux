@@ -1,0 +1,7 @@
+cat values.txt | TERM=vt100 ttyplot -t test
+
+
+ping 8.8.8.8 | sed -u 's/^.*time=//g; s/ ms//g' | ttyplot -t "ping to 8.8.8.8" -u ms
+
+
+ttyplot plot terminal ejemplo ping

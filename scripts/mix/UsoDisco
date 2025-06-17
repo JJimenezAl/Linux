@@ -1,0 +1,14 @@
+#!/bin/bash
+hora=$(timedatectl | grep Local | awk '{print $4}')
+
+file=disk_$hora.txt
+cd /home/uperf/output/
+
+echo "Date:"$(date +"%Y-%m-%d-%H-%M") > $file
+echo "Group:Home:Scratch">>$file
+echo "grp21:$(du -sc /home/u1/ /home/u2 /home/u21 | grep total | awk '{print $1}'):"$(du -s /data/scratch/folder/ | awk ' {print $1}') >>$file
+echo "grp32:$(du -sc /home/u32/ | grep total | awk '{print $1}'):"$(du -s /data/scratch/folder2/ | awk ' {print $1}') >>$file
+echo "grp45:$(du -sc /home/u45/  | grep total | awk '{print $1}'):"$(du -s /data/scratch/folder3/ | awk ' {print $1}') >>$file
+
+
+chown uperf:uperf disk* 

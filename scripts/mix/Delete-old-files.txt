@@ -3,13 +3,19 @@ Create files with older timestamp
 
 touch -d "Thu, 1 March 2018 12:30:00" a
 
-
+find /var/log -name "*.log" -type f -mtime +30 -exec rm -f {} \;
 
 
 Find and delete files older than 90 days
 
 
-find /path-to-dir -mtime +90 -exec ls -l {} \;
+find /path-to-dir -mtime +10 -exec ls -l {} \;
+
+o
+find /path -name *.sql.old | xargs rm -f
+
+find BKPSQL/ -atime +5
+
 
 
 

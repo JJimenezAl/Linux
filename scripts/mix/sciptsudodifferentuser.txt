@@ -1,0 +1,16 @@
+The trick is to use "sudo" command instead of "su"
+
+You may need to add this
+
+username1 ALL=(username2) NOPASSWD: /path/to/svn
+
+to your /etc/sudoers file
+
+and change your script to:
+
+sudo -u username2 -H sh -c "cd /home/$USERNAME/$PROJECT; svn update" 
+
+
+
+
+su aspera -c touch /data/LAB/datagen/NAGENCOL/NAGENCOL_ANALYSIS_CNAG/$1/BAM/1

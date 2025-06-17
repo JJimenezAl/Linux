@@ -1,0 +1,18 @@
+#!/bin/bash
+
+(timedatectl | grep Local | awk '{print $4 " "  $5}') >> texto
+date >> texto
+
+
+# put current date as yyyy-mm-dd in $date
+date=$(date '+%Y-%m-%d')
+
+# put current date as yyyy-mm-dd HH:MM:SS in $date
+date=$(date '+%Y-%m-%d %H:%M:%S')
+
+# print current date directly
+echo $(date '+%Y-%m-%d')
+
+#Crear carpeta con fecha
+
+backup_dir=$(date +'%m/%d/%Y')

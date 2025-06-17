@@ -1,0 +1,1 @@
+for i in *.sample; do NEWNAME=`echo "$i" | sed 's/\.sample//'`; mv "$i" "$NEWNAME"; done

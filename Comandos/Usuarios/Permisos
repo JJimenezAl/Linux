@@ -1,0 +1,43 @@
+The classic Linux way of doing this sort of thing goes something like this:
+
+    Create the shared folder:
+
+    sudo mkdir /home/Shared
+
+    Create the new user's group:
+
+    sudo addgroup newgroup
+
+    Change ownership of the shared folder to the new group:
+
+    sudo chown :newgroup /home/Shared
+
+    Add your desired users to that group:
+
+    sudo adduser user1 newgroup
+
+Repeat for all users.
+
+Now you have some decisions to make about what you want those users to be able to do:
+
+    [a] All group users can add to and delete from the folder and can read and but not write to each others files:
+
+    sudo chmod 0770 /home/Shared
+
+    [b] Same as above but only the owner of the file can delete it:
+
+    sudo chmod 1770 /home/Shared
+
+    [c] All group users can add to and delete from the folder and can read and write to each other's files:
+
+    sudo chmod 2770 /home/Shared
+
+    [d] Same as [c] except only the owner of the file can delete it:
+
+    sudo chmod 3770 /home/Shared
+
+A 1 in the first position of the chmod command is the sticky bit which prevents deletion of a file to anyone other than the owner.
+
+A 2 in the first position of the chmod command is the setgid bit which forces all new or copied files to have the group of that folder.
+
+A 3 in the first position of the chmod command is the combination of the sticky (1) & setgid (+2) bits.

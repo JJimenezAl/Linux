@@ -20,7 +20,7 @@ chmod 400 $HOME/.ssh/user
 chown $USER $HOME/.ssh/user
 
 # Create the remote SSH Tunnel
-echo "Creating the HPCNow! Support Tunnel. Press Ctrl+C to terminate the SSH tunnel"
+echo "Creating Support Tunnel. Press Ctrl+C to terminate the SSH tunnel"
 ssh -o 'StrictHostKeyChecking=no' \
     -o 'ExitOnForwardFailure=yes' \
     -o 'ServerAliveInterval=30' \
